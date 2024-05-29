@@ -24,7 +24,7 @@ model Item {
 model Store {
   sid       String                                @default(cuid()) @id
   name      String?                               @unique
-  location  Unsupported("geometry(Point, 4326)")  @default(null)
+  sortcode  String
   image     Boolean                               @default(false)
   items     Item[]                                @relation(name: "StoreItems")
 }
