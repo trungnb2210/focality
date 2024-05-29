@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x, 20.x]
-        # TODO: Check versions (see https://nodejs.org/en/about/releases/)
+        # Node versions to run tests across
 
     steps:
     - uses: actions/checkout@v4
@@ -29,5 +29,5 @@ jobs:
     - run: npm run build --if-present
     # - run: npm run lint
     # to lint or not to lint
-    # - run: npm test
-    # TODO: Add tests
+    - run: npm test
+
