@@ -1,0 +1,30 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Item {
+  iid             String    @default(cuid()) @id
+  name            String    @unique
+  nativeName      String?
+  price           Float     @default(0.0)
+  description     String? 
+  storeId         String    // Foreign key
+  store           Store     @relation(fields: [storeId], references: [sid], name: "StoreItems")
+  @@index([price])
+}
+
+model Store {
+  sid       String                                @default(cuid()) @id
+  name      String?                               @unique
+  location  Unsupported("geometry(Point, 4326)")  @default(null)
+  image     Boolean                               @default(false)
+  items     Item[]                                @relation(name: "StoreItems")
+}
