@@ -1,14 +1,10 @@
 "use client";
 
 import React, { useState } from 'react';
-import NavBar from './Component/NavBar';
-import SearchBar from './Component/SearchBar';
-import IngredientItemAdd from "./Component/IngredientItemAdd"
-import FindStoreButton from './Component/FindStoreButton';
-import AddButton from './Component/AddButton'
-import IngredientItem from './Component/IngredientItem';
-import Popup from './Component/Popup';
-import IngredientItems from './Component/IngredientItems';
+import NavBar from '../../components/NavBar';
+import SearchBar from '../../components/SearchBar';
+import Popup from '../../components/Popup';
+import IngredientItemsAdd from '@/components/IngredientItemsAdd';
 
 const SearchIngredientPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +28,7 @@ const SearchIngredientPage: React.FC = () => {
             Frequent Picks
         </div>
         <div className="py-[6px] w-full items-center flex justify-center">
-            <IngredientItems ingredients={frequent}/>
+            <IngredientItemsAdd ingredients={frequent}/>
         </div>
       </main>
       <Popup ingredient="Fish Sauce" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

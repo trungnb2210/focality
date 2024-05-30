@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "../../globals.css"
 import Link from "next/link"
 import { IoIosArrowBack } from "react-icons/io"
 

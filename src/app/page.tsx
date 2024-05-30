@@ -11,8 +11,8 @@
 //   );
 // }
 import Link from "next/link"
-import IngredientsPage from "./client/IngredientsPage";
-import SearchIngredientPage from "./client/SearchIngredientPage";
+import IngredientsPage from "../pages/client/ingredient-list-page";
+import SearchIngredientPage from "@/pages/client/search-ingredient-page";
 
 export default async function Home() {
   return (
