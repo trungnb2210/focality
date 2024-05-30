@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from 'react';
-import NavBar from '../../components/NavBar';
-import FindStoreButton from '../../components/FindStoreButton';
-import IngredientItems from '../../components/IngredientItems';
+import NavBar from '../components/NavBar';
+import FindStoreButton from '../components/FindStoreButton';
+import IngredientItems from '../components/IngredientItems';
 import { FaPlus } from 'react-icons/fa';
 import Link from 'next/link';
-import SearchIngredientPage from './search-ingredient-page';
+import SearchIngredientPage from './search';
 
 interface IngredientsPageProps {
     ingredients: string[];

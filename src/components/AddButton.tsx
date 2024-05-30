@@ -1,7 +1,9 @@
+"use client";
+
 import React from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
-import SearchIngredientPage from '@/pages/client/search-ingredient-page';
+import SearchIngredientPage from '@/pages/search';
 
 const AddButton: React.FC = () => {
   const router = useRouter();

@@ -11,8 +11,12 @@
 //   );
 // }
 import Link from "next/link"
-import IngredientsPage from "../pages/client/ingredient-list-page";
-import SearchIngredientPage from "@/pages/client/search-ingredient-page";
+import IngredientsPage from "../pages/ingredient-list-page";
+import SearchIngredientPage from "@/pages/search";
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Route } from "react-router-dom";
+
 
 export default async function Home() {
   // Fetch data from Prisma
@@ -20,7 +24,7 @@ export default async function Home() {
 
   return (
     <main className="">
-      <SearchIngredientPage></SearchIngredientPage>
+      <IngredientsPage ingredients={["hello", "yoo fronendd"]}></IngredientsPage>
     </main>
   );
 }

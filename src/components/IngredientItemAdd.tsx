@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import NavBar from './NavBar';
 import { FaPlus } from "react-icons/fa6";
