@@ -10,21 +10,26 @@
 //     </main>
 //   );
 // }
-import Link from "next/link"
-import IngredientsPage from "../pages/ingredient-list-page";
-import SearchIngredientPage from "@/pages/search";
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter, Route } from "react-router-dom";
-
+import React, { useContext, useReducer, useState } from "react";
+import IngredientsPage from "@/pages/ingredients";
 
 export default async function Home() {
   // Fetch data from Prisma
 //   const stores = await prisma.store.findMany();
+//   let i = [
+//     "Pork Belly",
+//     "Pork Shoulder",
+//     "Rico Coconut Soda",
+//     "Fish sauce - Nước Mắm (Vietnam)",
+//     "Salt",
+//     "Caramel Color (nuoc mau)",
+//     "Eggs",
+//     "Yellow Onion"
+//   ];
 
   return (
     <main className="">
-      <IngredientsPage ingredients={[]}></IngredientsPage>
+        <IngredientsPage ingredients={[]}></IngredientsPage>
     </main>
   );
 }
