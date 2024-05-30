@@ -14,6 +14,17 @@ interface IngredientsPageProps {
     ingredients: string[];
   }
 
+// Function to create URL with query parameters based on ingredients array
+const createStorePageUrl = (ingredients: string[]) => {
+  const baseUrl = "list-of-store-page";
+  if (ingredients.length === 0) {
+    return baseUrl;
+  }
+  const queryString = ingredients.map(ingredient => `ingredients=${encodeURIComponent(ingredient)}`).join('&');
+  return `${baseUrl}?${queryString}`;
+};
+
+
 const IngredientsPage: React.FC<IngredientsPageProps> = ({  ingredients }) => {
   let findStoreButton = ingredients.length == 0? true: false;
 
@@ -26,9 +37,11 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({  ingredients }) => {
         </div>
       </main>
       <footer className="w-full flex justify-center items-center mb-[25px]">
-        <div className="ml-[16px] mr-[14px]">
+        <Link
+            href={createStorePageUrl(ingredients)}
+            className="ml-[16px] mr-[14px]">
             <FindStoreButton d={findStoreButton} />
-        </div>
+        </Link>
         <Link
             href={"search"}
             className="w-[44px] h-[44px] py-[14px] px-[16px] rounded-[67px] 
