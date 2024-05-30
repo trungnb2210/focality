@@ -24,7 +24,7 @@ export default async function Home() {
 
   return (
     <main className="">
-      <IngredientsPage ingredients={["hello", "yoo fronendd"]}></IngredientsPage>
+      <IngredientsPage ingredients={[]}></IngredientsPage>
     </main>
   );
 }

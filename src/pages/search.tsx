@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import "../app/globals.css"
 import NavBar from '../components/NavBar';
 import SearchBar from '../components/SearchBar';
 import Popup from '../components/Popup';
@@ -18,13 +19,13 @@ const SearchIngredientPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[812px] justify-between">
+    <div className="flex flex-col h-screen justify-between">
       <NavBar brandName='Ingredients'/>
       <main className="flex-grow flex flex-col ">
         <div className="mb-2 flex justify-center">
             <SearchBar placeholder='White Rice, Soy Sauce' onEnterPress={handleEnterPress} />
         </div>
-        <div className="flex justify-center w-[343px]">
+        <div className="flex justify-center w-[343px items-center]">
             <div>
                 Frequent Picks
             </div>

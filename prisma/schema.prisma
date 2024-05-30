@@ -12,7 +12,7 @@ datasource db {
 
 model Item {
   iid             String    @default(cuid()) @id
-  name            String    @unique
+  name            String    
   nativeName      String?
   price           Float     @default(0.0)
   description     String? 

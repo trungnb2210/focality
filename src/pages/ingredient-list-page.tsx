@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import "../app/globals.css"
 import NavBar from '../components/NavBar';
 import FindStoreButton from '../components/FindStoreButton';
 import IngredientItems from '../components/IngredientItems';
@@ -17,14 +18,14 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({  ingredients }) => {
   let findStoreButton = ingredients.length == 0? true: false;
 
   return (
-    <div className="flex flex-col h-[812px] justify-between">
+    <div className="flex flex-col h-screen justify-between]">
       <NavBar brandName='Ingredients'/>
-      <main className="flex-grow flex flex-col items-center">
+      <main className="flex-grow flex flex-col">
         <div className="py-[6px] w-full items-center flex justify-center">
             <IngredientItems ingredients={ingredients}/>
         </div>
       </main>
-      <footer className="w-full flex items-center mb-[25px]">
+      <footer className="w-full flex justify-center items-center mb-[25px]">
         <div className="ml-[16px] mr-[14px]">
             <FindStoreButton d={findStoreButton} />
         </div>

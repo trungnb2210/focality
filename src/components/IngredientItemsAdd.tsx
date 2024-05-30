@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import IngredientItemAdd from './IngredientItem';
+import IngredientItemAdd from './IngredientItemAdd';
 
 interface IngredientItemsProps {
   ingredients: string[];
