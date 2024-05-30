@@ -26,6 +26,7 @@ const createStorePageUrl = (ingredients: string[]) => {
 
 
 const IngredientsPage: React.FC<IngredientsPageProps> = ({  ingredients }) => {
+  ingredients = ingredients ? ingredients : []
   let findStoreButton = ingredients.length == 0? true: false;
 
   return (
