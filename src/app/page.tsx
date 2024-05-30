@@ -10,11 +10,14 @@
 //     </main>
 //   );
 // }
+import Link from "next/link"
+import IngredientsPage from "./client/IngredientsPage";
+import SearchIngredientPage from "./client/SearchIngredientPage";
 
 export default async function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1>Hello, World to Linh!</h1>
+    <main className="">
+      <SearchIngredientPage></SearchIngredientPage>
     </main>
   );
 }
