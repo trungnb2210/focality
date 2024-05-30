@@ -1,5 +1,9 @@
 # Drp46
 
+Note:
+Everytime schema.prisma is updated run "npx prisma generate"
+Then push to the server with "npx primsa db push"
+Modify table by "npx prisma studio"
 
 
 ## Getting started
