@@ -1,6 +1,8 @@
 "use client";
 
 import { GetServerSideProps } from 'next';
+import "../app/globals.css"
+import NavBar from '../components/NavBar';
 import React from 'react';
 import prisma from '../../lib/primsa';
 
@@ -51,20 +53,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ stores, ingredients }) => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1>Focality</h1>
+    <div className="flex flex-col h-screen justify-between]">
+    <NavBar brandName='Stores'/>
+    <main className="flex-grow flex flex-col">
       <div>
-        {stores.length > 0 ? (
-          stores.map((store) => (
-            <div key={store.sid} className="store">
-              <p>{store.name} : {store.sortcode}</p>
-            </div>
-          ))
-        ) : (
-          <p>No stores found for the given ingredients.</p>
-        )}
-      </div>
+          {stores.length > 0 ? (
+            stores.map((store) => (
+              <div key={store.sid} className="store">
+                <p>{store.name} : {store.sortcode}</p>
+              </div>
+            ))
+          ) : (
+            <p>No stores found for the given ingredients.</p>
+          )}
+        </div>
     </main>
+  </div>
   );
 };
 
