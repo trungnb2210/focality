@@ -10,12 +10,8 @@
 //     </main>
 //   );
 // }
-import Link from "next/link"
 import IngredientsPage from "../pages/ingredient-list-page";
-import SearchIngredientPage from "@/pages/search";
 import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter, Route } from "react-router-dom";
 
 
 export default async function Home() {
