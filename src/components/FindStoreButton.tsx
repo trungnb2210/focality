@@ -10,7 +10,7 @@ interface Disabled {
 
 const FindStoreButton: React.FC<Disabled> = ({ d }) => {
     let disableColor = "bg-[#E3E5E5] text-[#979C9E]";
-    let notDisableColor = "bg-[#7A9E9F] text-[#FFFFFF]";
+    let notDisableColor = "bg-[#1C941F] text-[#FFFFFF]";
     let color = d? disableColor: notDisableColor;
     let ingredients = ["adfadsf"];
     const router = useRouter();

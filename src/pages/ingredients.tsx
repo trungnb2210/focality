@@ -13,7 +13,7 @@ interface IngredientsPageProps {
     ingredients: string[];
   }
 
-const IngredientsPage: React.FC<IngredientsPageProps> = ({ingredients}) => {
+const IngredientsPage: React.FC<IngredientsPageProps> = ({ingredients = []}) => {
   let findStoreButton = ingredients.length == 0
 
   return (
@@ -21,7 +21,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ingredients}) => {
       <NavBar brandName='Ingredients'/>
       <main className="flex-grow flex flex-col">
         <div className="py-[6px] w-full items-center flex justify-center">
-            <IngredientItems ingredients={[]}/>
+            <IngredientItems ingredients={ingredients}/>
         </div>
       </main>
       <footer className="w-full flex justify-center items-center mb-[25px]">
@@ -42,6 +42,25 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ingredients}) => {
       </footer>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { ingredients } = context.query;
+
+  let ingredientArray: string[];
+  if (typeof ingredients === 'string') {
+    ingredientArray = [ingredients];
+  } else if (Array.isArray(ingredients)) {
+    ingredientArray = ingredients as string[];
+  } else {
+    ingredientArray = [];
+  }
+
+  return {
+    props: {
+      ingredients: ingredientArray,
+    },
+  };
 };
 
 export default IngredientsPage;
