@@ -25,7 +25,7 @@ const SearchIngredientPage: React.FC<SearchIngredientProp> = ({ fml }) => {
       const ingredients = Array.isArray(query.ingredients) ? query.ingredients : [query.ingredients];
       setSelectedIngredients(ingredients);
     }
-  }, [router.query]);
+  }, [router]);
 
   const frequent = [
     'White Rice',
