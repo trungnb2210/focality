@@ -19,16 +19,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { ingredients } = context.query;
 
   // Ensure ingredients are passed as an array of strings
-  const ingredientsArray = Array.isArray(ingredients) ? ingredients : [ingredients];
-
+  const ingredientsArray = undefined != ingredients 
+    ? (Array.isArray(ingredients) ? ingredients : [ingredients]) 
+    : [];
 
   const stores = await prisma.store.findMany({
     where: {
       items: {
         some: {
-          name: {
-            in: ingredientsArray as string[],
-          },
+          OR: [
+            { name: { in: ingredientsArray as string[] } } ,
+            { nativeName: { in: ingredientsArray as string[] } },
+          ]
         },
       },
     },
