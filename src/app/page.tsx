@@ -16,7 +16,7 @@ import SearchIngredientPage from "@/pages/client/search-ingredient-page";
 
 export default async function Home() {
   // Fetch data from Prisma
-  const stores = await prisma.store.findMany();
+//   const stores = await prisma.store.findMany();
 
   return (
     <main className="">
