@@ -9,9 +9,9 @@ interface PopupProps {
 }
 
 const Popup: React.FC<PopupProps> = ({ ingredient, isOpen, onClose }) => {
-  if (!isOpen) return null;
-
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  
+  if (!isOpen) return null;
 
   const handleSelect = (option: string) => {
     setSelectedOptions((prev) =>

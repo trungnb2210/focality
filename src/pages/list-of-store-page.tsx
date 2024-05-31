@@ -1,31 +1,75 @@
-// // src/app/client/ingredient-list-page/page.tsx
+"use client";
 
-// "use client";
+import { GetServerSideProps } from 'next';
+import "../app/globals.css"
+import NavBar from '../components/NavBar';
+import React from 'react';
+import prisma from '../../lib/primsa';
 
-// import React from 'react';
-// import NavBar from '@/components/NavBar';
+interface Store {
+  sid: string;
+  name: string | null;
+  sortcode: string;
+}
 
-// const IngredientListPage: React.FC = () => {
-//   const { ingredients } = useIngredientsContext();
+interface ListOfStorePageProps {
+  stores: Store[];
+  ingredients: string[];
+}
 
-//   return (
-//     <div className="flex flex-col h-full">
-//       <NavBar brandName="Ingredients List" />
-//       <main className="flex-grow p-4">
-//         <h1 className="text-2xl font-bold mb-4">Ingredients List</h1>
-//         <div className="flex flex-col space-y-4 p-4">
-//           {ingredients.map((ingredient, index) => (
-//             <div
-//               key={index}
-//               className="flex justify-between items-center p-4 bg-[#4F6367] text-white rounded-full shadow-md"
-//             >
-//               <span>{ingredient}</span>
-//             </div>
-//           ))}
-//         </div>
-//       </main>
-//     </div>
-//   );
-// };
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { ingredients } = context.query;
 
-// export default IngredientListPage;
+  // Ensure ingredients are passed as an array of strings
+  const ingredientsArray = undefined != ingredients 
+    ? (Array.isArray(ingredients) ? ingredients : [ingredients]) 
+    : [];
+
+  const stores = await prisma.store.findMany({
+    where: {
+      items: {
+        some: {
+          OR: [
+            { name: { in: ingredientsArray as string[] } } ,
+            { nativeName: { in: ingredientsArray as string[] } },
+          ]
+        },
+      },
+    },
+    select: {
+      sid: true,
+      name: true,
+      sortcode: true,
+    },
+  });
+
+  return {
+    props: {
+      stores,
+      ingredients: ingredientsArray,
+    },
+  };
+}
+
+const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ stores, ingredients }) => {
+  return (
+    <div className="flex flex-col h-screen justify-between]">
+    <NavBar brandName='Stores'/>
+    <main className="flex-grow flex flex-col">
+      <div>
+          {stores.length > 0 ? (
+            stores.map((store) => (
+              <div key={store.sid} className="store">
+                <p>{store.name} : {store.sortcode}</p>
+              </div>
+            ))
+          ) : (
+            <p>No stores found for the given ingredients.</p>
+          )}
+        </div>
+    </main>
+  </div>
+  );
+};
+
+export default ListOfStorePage;
