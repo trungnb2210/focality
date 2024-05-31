@@ -83,6 +83,9 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ stores, ingredients }
               <img src={store.imageUrl} alt={`Store front of ${store.name}`} className="w-full md:w-1/3 h-56 object-cover rounded-lg"/>
               <div className="mt-4 md:mt-0 md:ml-6 flex-grow">
                 <h3 className="text-2xl font-semibold">{store.name}</h3>
+                <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.name || '')}+${store.sortcode}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                  {store.sortcode}
+                </a>
                 <div className="mt-3">
                   <h4 className="text-lg font-semibold">Ingredients Available:</h4>
                   <ul className="list-disc list-inside mt-2 space-y-1">
