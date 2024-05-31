@@ -27,7 +27,13 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ingredients = []}) => 
       </main>
       <footer className="w-full flex justify-center items-center mb-[25px]">
         <div className="ml-[16px] mr-[14px]">
-            <FindStoreButton d={findStoreButton}/>
+            <Link href={{
+                pathname: "list-of-store-page",
+                query: {
+                    ingredients: ingredients
+                }
+            }}></Link>
+            <FindStoreButton d={findStoreButton} ingredientList={ingredients}/>
         </div>
         <Link
             href={{

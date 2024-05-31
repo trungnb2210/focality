@@ -28,7 +28,7 @@ const SearchIngredientPage: React.FC<SearchIngredientProp> = ({ fml }) => {
   }, [router.query]);
 
   const frequent = [
-    'White Rice',
+    'Prahok',
     'Fish Sauce Nam Pla (Thailand)',
     'Basmati Rice',
     'Jasmine Rice',

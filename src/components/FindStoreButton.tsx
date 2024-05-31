@@ -1,35 +1,31 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
 import React from 'react';
-// import ListOfStorePage from '@/pages/list-of-store-page';
-
-interface Disabled {
+import Link
+ from 'next/link';
+interface FindStoreButtonProp {
     d: boolean;
+    ingredientList: string[];
 }
 
-const FindStoreButton: React.FC<Disabled> = ({ d }) => {
+const FindStoreButton: React.FC<FindStoreButtonProp> = ({ d, ingredientList }) => {
     let disableColor = "bg-[#E3E5E5] text-[#979C9E]";
     let notDisableColor = "bg-[#1C941F] text-[#FFFFFF]";
     let color = d? disableColor: notDisableColor;
-    let ingredients = ["adfadsf"];
-    const router = useRouter();
-
-    const handleClick = () => {
-        if (!d) {
-            router.push(`list-of-store-page?ingredients=${encodeURIComponent(JSON.stringify(ingredients))}`)
-        }
-    }
 
     return (
-        <button
-            onClick={handleClick}
+        <Link
+            href={{
+                pathname: "list-of-store-page",
+                query: {
+                    ingredients: ingredientList
+                }
+            }}
             className={`${color} rounded-[48px] flex-grow
             w-[285px] h-[44px] py-[14px] items-center flex justify-center`}
-            disabled={d} // Add the disabled attribute conditionally
         >
             Find Store
-        </button>
+        </Link>
     );
 };
 
