@@ -7,7 +7,6 @@ import "../app/globals.css";
 import NavBar from '@/components/NavBar';
 import SearchBar from '@/components/SearchBar';
 import Popup from '@/components/Popup';
-import { FaPlus } from "react-icons/fa";
 import Link from 'next/link';
 
 interface SearchIngredientProp {
@@ -25,7 +24,7 @@ const SearchIngredientPage: React.FC<SearchIngredientProp> = ({ fml }) => {
       const ingredients = Array.isArray(query.ingredients) ? query.ingredients : [query.ingredients];
       setSelectedIngredients(ingredients);
     }
-  }, [router]);
+  }, [router.query]);
 
   const frequent = [
     'Prahok',
@@ -34,10 +33,6 @@ const SearchIngredientPage: React.FC<SearchIngredientProp> = ({ fml }) => {
     'Jasmine Rice',
     'Fish Sauce Nuoc Mam (Vietnam)',
   ];
-
-  const handleEnterPress = () => {
-    setIsModalOpen(true);
-  };
 
   const handleCheckboxChange = (ingredient: string) => {
     setSelectedIngredients(prevSelected =>
@@ -52,39 +47,40 @@ const SearchIngredientPage: React.FC<SearchIngredientProp> = ({ fml }) => {
       <NavBar brandName='Ingredients' />
       <main className="flex-grow flex flex-col items-center">
         <div className="mb-2 flex justify-center">
-          <SearchBar placeholder='White Rice, Soy Sauce' onEnterPress={handleEnterPress} />
+          <SearchBar placeholder='White Rice, Soy Sauce' onEnterPress={function (): void {
+                      throw new Error('Function not implemented.');
+                  } } />
         </div>
-        <div className="flex justify-center w-[343px] items-center font-bold py-2">
+        <div className="flex justify-center w-full items-center font-bold pt-5">
           Frequent Picks
         </div>
-        <div className="py-[6px] w-full items-center flex justify-center">
-          <div className="flex flex-col items-center space-y-4">
+        <div className="py-6 w-full flex justify-center">
+          <div className="flex flex-col items-center space-y-4 w-[343px]">
             {frequent.map((ingredient, index) => (
-              <div key={index} className="flex items-center w-[343px]">
-                <input
-                  type="checkbox"
-                  id={`ingredient-${index}`}
-                  checked={selectedIngredients.includes(ingredient)}
-                  onChange={() => handleCheckboxChange(ingredient)}
-                  className="mr-2"
-                />
-                <label htmlFor={`ingredient-${index}`} className="flex-grow flex justify-between items-center h-[54px] bg-[#4F6367] rounded-[14px] text-white px-5">
-                  <span>{ingredient}</span>
-                </label>
+              <div
+                key={index}
+                onClick={() => handleCheckboxChange(ingredient)}
+                className={`w-full flex items-center p-3 rounded-lg cursor-pointer ${
+                  selectedIngredients.includes(ingredient) ? 'bg-[#4F6367] text-white' : 'bg-[#B8D8D8] text-black'
+                } drop-shadow-md`}
+              >
+                <span>{ingredient}</span>
               </div>
             ))}
           </div>
         </div>
       </main>
-      <footer className="w-auto flex justify-center items-center mb-[25px]">
+      <footer className="w-full flex justify-center items-center mb-4">
         <Link
           href={{
             pathname: "/ingredients",
             query: { ingredients: selectedIngredients }
           }}
-          className="py-[14px] px-[16px] rounded-[67px] bg-[#4F6367] text-white items-center flex justify-center"
+          className="py-2 px-4 rounded-full bg-[#EEF5DB] text-[#3E3F3B] hover:bg-[#3E3F3B]
+          hover:text-[#EEF5DB] focus:outline-none focus:ring-2 focus:ring-blue-500 
+          focus:ring-opacity-50 font-bold"
         >
-        Confirm
+          Confirm
         </Link>
       </footer>
       <Popup ingredient="Fish Sauce" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

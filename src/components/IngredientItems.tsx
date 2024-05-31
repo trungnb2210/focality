@@ -11,7 +11,9 @@ const IngredientItems: React.FC<IngredientItemsProps> = ({ ingredients }) => {
   return (
     <div className="flex flex-col items-center space-y-4">
       {ingredients.map((ingredient, index) => (
-        <IngredientItem key={index} label={ingredient} />
+        <IngredientItem key={index} label={ingredient} onRemove={function (): void {
+              throw new Error('Function not implemented.');
+          } } />
       ))}
     </div>
   );
