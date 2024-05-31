@@ -28,10 +28,10 @@ const SearchIngredientPage: React.FC<SearchIngredientProp> = ({ fml }) => {
 
   const frequent = [
     'Prahok',
-    'Fish Sauce Nam Pla (Thailand)',
+    'Nam Pla',
     'Basmati Rice',
     'Jasmine Rice',
-    'Fish Sauce Nuoc Mam (Vietnam)',
+    'Nuoc Mam',
   ];
 
   const handleCheckboxChange = (ingredient: string) => {

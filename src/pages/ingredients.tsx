@@ -15,13 +15,13 @@ interface IngredientsPageProps {
 
 const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
     const [ingredientList, setIngredientList] = useState(ingredients);
-    const [hoverStates, setHoverStates] = useState<boolean[]>(Array(ingredients.length).fill(false)); // Track hover state for each item
+    const [hoverStates, setHoverStates] = useState<boolean[]>(Array(ingredients.length).fill(false));
 
     const removeIngredient = (index: number) => {
-        const filteredIngredients = ingredientList.filter((_, idx) => idx !== index); // Remove by index
+        const filteredIngredients = ingredientList.filter((_, idx) => idx !== index);
         setIngredientList(filteredIngredients);
         const newHoverStates = [...hoverStates];
-        newHoverStates.splice(index, 1); // Also remove the hover state at the same index
+        newHoverStates.splice(index, 1);
         setHoverStates(newHoverStates);
     };
 
@@ -39,6 +39,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
     const disableColor = "bg-[#E3E5E5] text-[#979C9E]";
     const notDisableColor = "border-1 border-[#7A9E9F] bg-[#EEF5DB] text-[#3E3F3B] hover:bg-[#3E3F3B] hover:text-[#EEF5DB]";
     const color = findStoreButton ? disableColor : notDisableColor;
+    const pointerEvents = findStoreButton ? "pointer-events-none" : "";
 
     return (
         <div className="flex flex-col h-screen justify-between">
@@ -76,7 +77,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
                             pathname: "list-of-store-page",
                             query: { ingredients: ingredientList }
                         }}
-                        className={`${color} rounded-[48px] flex-grow w-[285px] h-[44px] py-[14px] items-center flex justify-center`}
+                        className={`${color} ${pointerEvents} rounded-[48px] flex-grow w-[285px] h-[44px] py-[14px] items-center flex justify-center`}
                     >
                         Find Store
                     </Link>
