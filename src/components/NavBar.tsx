@@ -13,7 +13,7 @@ function NavBar({ brandName }: NavBarProps) {
   const router = useRouter();
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900 h-[56px] px-[16px] w-screen mb-3">
+    <nav className="h-[56px] px-[16px] w-screen mb-3">
       <div className="max-w-screen-xl flex items-center mx-auto">
         <button onClick={router.back} className="flex-none pt-[16px]">
           <IoIosArrowBack size={24} />
