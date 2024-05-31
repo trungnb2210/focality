@@ -3,7 +3,7 @@ import IngredientsPage from "@/pages/ingredients";
 
 export default async function Home() {
   return (
-    <main className="bg-white">
+    <main className="">
         <IngredientsPage ingredients={[]}></IngredientsPage>
     </main>
   );
