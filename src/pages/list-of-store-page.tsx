@@ -64,13 +64,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 
 
-const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ stores, ingredients }) => {
+  const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ stores, ingredients }) => {
     return (
       <div className="flex flex-col h-screen">
         <NavBar brandName='Stores List'/>
         <main className="flex-grow overflow-y-auto">
           {stores.map((store) => (
-            <div key={store.sid} className="mb-4 p-4 bg-white shadow rounded-lg mx-10">
+            <div key={store.sid.toString()} className="mb-4 p-4 bg-white shadow rounded-lg mx-10">
               <img src={store.imageUrl} alt={`Store front of ${store.name}`} className="w-full h-56 object-cover rounded-lg"/>
               <div className="mt-3">
                 <h3 className="text-lg font-semibold">{store.name}</h3>
@@ -78,12 +78,12 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ stores, ingredients }
                   <strong>Ingredients Available:</strong>
                   <ul>
                     {store.items.filter(item =>
-                      ingredients.some(ingredient =>
+                      ingredients.some(ingredient => 
                         item.name.toLowerCase().includes(ingredient.toLowerCase()) ||
                         (item.nativeName && item.nativeName.toLowerCase().includes(ingredient.toLowerCase()))
                       )
                     ).map(item => (
-                      <li key={item.iid}>{item.name} ({item.nativeName || 'N/A'})</li>
+                      <li key={item.iid.toString()}>{item.name} ({item.nativeName || 'N/A'})</li>
                     ))}
                   </ul>
                   <strong>Ingredients Unavailable:</strong>
@@ -107,7 +107,8 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ stores, ingredients }
         </main>
       </div>
     );
-};
-
-export default ListOfStorePage;
+  };
+  
+  export default ListOfStorePage;
+  
 
