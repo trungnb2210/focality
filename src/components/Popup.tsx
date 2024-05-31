@@ -35,9 +35,7 @@ const Popup: React.FC<PopupProps> = ({ ingredient, isOpen, onClose }) => {
     'Bagoong (Philippines)',
     'Budu Sauce (Malaysia)',
     'Kapi (Thailand)',
-    'Nước Mắm (Vietnam)',
-		'hello',
-		'ahhhh y front end'
+    'Nước Mắm (Vietnam)'
   ];
 
   return (

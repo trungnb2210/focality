@@ -61,7 +61,7 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ stores, ingredients }
           <div key={store.sid} className="mb-4 p-4 bg-white shadow rounded-lg mx-10">
             <img src={store.imageUrl} alt={`Store front of ${store.name}`} className="w-full h-56 object-cover rounded-lg"/>
             <div className="mt-3">
-              <h3 className="text-lg font-semibold">{store.name}</h3>
+              <h3 className="text-lg font-semibold text-black">{store.name}</h3>
               <div className="flex justify-between items-center mt-2">
                 
               </div>
