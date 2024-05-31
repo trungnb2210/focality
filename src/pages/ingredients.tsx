@@ -10,6 +10,7 @@ import { FaPlus } from 'react-icons/fa';
 import Link from 'next/link';
 import { GetServerSideProps } from 'next';
 
+
 interface IngredientsPageProps {
     ingredients: string[];
   }
