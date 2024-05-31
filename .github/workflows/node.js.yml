@@ -1,7 +1,10 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 
 name: Node.js CI
-on: [push, pull_request]
+
+on:
+  push: {}
+  pull_request: {}
 
 env:
   POSTGRES_DATABASE: ${{ secrets.POSTGRES_DATABASE }}
@@ -12,6 +15,7 @@ env:
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
   POSTGRES_URL_NO_SSL: ${{ secrets.POSTGRES_URL_NO_SSL }}
+  BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
 
 jobs:
   build:
