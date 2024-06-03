@@ -44,7 +44,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
 
    return (
        <div className="flex flex-col h-screen justify-between">
-           <NavBar brandName='Ingredientsdfadf'/>
+           <NavBar brandName='Ingredients'/>
            <main className="flex-grow flex flex-col items-center">
                <div className="py-[6px] w-full flex justify-center">
                    <div className="flex flex-col items-center space-y-4">
