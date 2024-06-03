@@ -23,7 +23,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       where: {
         OR: [
           { name: { contains: ingredient, mode: "insensitive" } },
-          { nativeName: { contains: ingredient, mode: "insensitive" } }
+          { nativeName: { contains: ingredient, mode: "insensitive" } },
+          { description: { contains: ingredient, mode: "insensitive" } }
         ]
       },
       select: {
