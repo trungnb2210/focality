@@ -5,8 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import "../app/globals.css";
 import NavBar from '@/components/NavBar';
-import  {SearchBar } from '@/components/SearchBar';
-import Popup from '@/components/Popup';
+import  { SearchBar } from '@/components/SearchBar';
 import Link from 'next/link';
 
 
@@ -78,7 +77,6 @@ const SearchIngredientPage: React.FC = () => {
          Confirm
        </Link>
      </footer>
-     <Popup ingredient="Fish Sauce" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
    </div>
  );
 };

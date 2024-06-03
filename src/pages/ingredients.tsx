@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import "../app/globals.css";
 import NavBar from '../components/NavBar';
 import { FaPlus } from 'react-icons/fa';
