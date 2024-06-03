@@ -38,8 +38,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     });
 
-    console.log(results);
-
     const itemMap = new Map();
     results.forEach(item => {
         let n = item.nativeName? item.nativeName: item.name;

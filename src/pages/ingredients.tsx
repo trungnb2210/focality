@@ -25,6 +25,12 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
        setHoverStates(newHoverStates);
    };
 
+   const preprocessIngredients = (ingredientList: string[]) => {
+    return ingredientList.map(ingredient =>
+            ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
+        );
+   };
+
    const handleMouseEnter = (index: number) => {
        const newHoverStates = hoverStates.map((state, idx) => idx === index ? true : state);
        setHoverStates(newHoverStates);
@@ -76,7 +82,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
                    <Link
                        href={{
                            pathname: "store",
-                           query: { ingredients: ingredientList }
+                           query: { ingredients: preprocessIngredients(ingredientList) }
                        }}
                        className={`${color} ${pointerEvents} rounded-[48px] flex-grow w-[285px] h-[44px] py-[14px] items-center flex justify-center`}
                    >
