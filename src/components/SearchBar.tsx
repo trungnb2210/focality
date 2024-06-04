@@ -48,10 +48,22 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
     }
   };
 
+  // Used to delay constant queries while user is typing
+  const debounce = (func: (...args: any[]) => void, wait: number) => {
+    let timeout: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
+  };
+
+  // Can change delay after typing before suggestions appear
+  const debouncedFetchSuggestions = useCallback(debounce(fetchSuggestions, 200), []); 
+
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value;
     setSearchTerm(searchValue);
-    fetchSuggestions(searchValue)
+    debouncedFetchSuggestions(searchValue)
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
