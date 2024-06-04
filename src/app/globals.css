@@ -20,6 +20,7 @@ body {
   color: rgb(var(--foreground-rgb));
   background: #F1F1E9FF;
   font-family: inter;
+  color: #020617;
 }
 
 @layer utilities {
@@ -34,4 +35,24 @@ body {
     background-color: #f0f0f0; /* Change to your desired background color on hover */
     /* Add any other styling you want for the hover effect */
   }
+
+.pac-container {
+    @apply bg-white rounded-lg shadow-lg z-50;
+}
+
+.pac-item {
+    @apply text-sm py-2 px-4 cursor-pointer;
+}
+
+.pac-item:hover {
+    @apply bg-gray-100;
+}
+
+.pac-item-query {
+    @apply font-semibold;
+}
+
+.pac-icon {
+    display: none;
+}
 
