@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import "../app/globals.css";
 import NavBar from '../components/NavBar';
 import { FaPlus } from 'react-icons/fa';
@@ -26,6 +25,12 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
        setHoverStates(newHoverStates);
    };
 
+   const preprocessIngredients = (ingredientList: string[]) => {
+    return ingredientList.map(ingredient =>
+            ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
+        );
+   };
+
    const handleMouseEnter = (index: number) => {
        const newHoverStates = hoverStates.map((state, idx) => idx === index ? true : state);
        setHoverStates(newHoverStates);
@@ -44,7 +49,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
 
    return (
        <div className="flex flex-col h-screen justify-between">
-           <NavBar brandName='Ingredientsdfadf'/>
+           <NavBar brandName='Ingredients'/>
            <main className="flex-grow flex flex-col items-center">
                <div className="py-[6px] w-full flex justify-center">
                    <div className="flex flex-col items-center space-y-4">
@@ -77,7 +82,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
                    <Link
                        href={{
                            pathname: "store",
-                           query: { ingredients: ingredientList }
+                           query: { ingredients: preprocessIngredients(ingredientList) }
                        }}
                        className={`${color} ${pointerEvents} rounded-[48px] flex-grow w-[285px] h-[44px] py-[14px] items-center flex justify-center`}
                    >

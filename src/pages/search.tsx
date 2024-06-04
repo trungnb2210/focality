@@ -5,15 +5,11 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import "../app/globals.css";
 import NavBar from '@/components/NavBar';
-import SearchBar from '@/components/SearchBar';
-import Popup from '@/components/Popup';
+import  { SearchBar } from '@/components/SearchBar';
 import Link from 'next/link';
 
-interface SearchIngredientProp {
-   fml: string[];
-}
 
-const SearchIngredientPage: React.FC<SearchIngredientProp> = ({ fml }) => {
+const SearchIngredientPage: React.FC = () => {
  const router = useRouter();
  const [isModalOpen, setIsModalOpen] = useState(false);
  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
@@ -47,9 +43,7 @@ const SearchIngredientPage: React.FC<SearchIngredientProp> = ({ fml }) => {
      <NavBar brandName='Ingredients'/>
      <main className="flex-grow flex flex-col items-center">
        <div className="mb-2 flex justify-center">
-         <SearchBar placeholder='White Rice, Soy Sauce' onEnterPress={function (): void {
-                     throw new Error('Function not implemented.');
-                 } } />
+         <SearchBar placeholder='White Rice, Soy Sauce' initialIngredients={selectedIngredients}/>
        </div>
        <div className="flex justify-center w-full items-center font-bold pt-5">
          Frequent Picks
@@ -83,7 +77,6 @@ const SearchIngredientPage: React.FC<SearchIngredientProp> = ({ fml }) => {
          Confirm
        </Link>
      </footer>
-     <Popup ingredient="Fish Sauce" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
    </div>
  );
 };
