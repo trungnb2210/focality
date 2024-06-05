@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { IoSearchOutline } from "react-icons/io5";
 import { useRouter } from 'next/router';
 import { Item } from '@/pages/api/ingredients';
@@ -10,6 +10,8 @@ interface searchBarProp {
 
 export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredients }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false); // Controls dropdown visibility
+  const [suggestions, setSuggestions] = useState<string[]>([]); 
   const router = useRouter();
 
   const handleSearch = async () => {
@@ -29,8 +31,39 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
       }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+  const fetchSuggestions = async (searchValue: string) => {
+    if (searchValue.length > 1) {
+      const matches = await queryDatabase(searchValue);
+      const items: Item[] = Array.isArray(matches) ? matches : [matches];
+      const itemsShown = 5;
+      const formattedItems = items.map(item => 
+        item.nativeName 
+          ? item.nativeName + ' (' + item.name + ')'
+          : item.name
+      ).slice(0, itemsShown);
+      setSuggestions(formattedItems);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+  };
+
+  // Used to delay constant queries while user is typing
+  const debounce = (func: (...args: any[]) => void, wait: number) => {
+    let timeout: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
+  };
+
+  // Can change delay after typing before suggestions appear
+  const debouncedFetchSuggestions = useCallback(debounce(fetchSuggestions, 200), []); 
+
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = event.target.value;
+    setSearchTerm(searchValue);
+    debouncedFetchSuggestions(searchValue)
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -39,7 +72,18 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
     }
   };
 
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchTerm(suggestion);
+    setShowSuggestions(false);
+    
+    router.push({
+      pathname: '/ingredients',
+      query: { ingredients: initialIngredients.concat([suggestion]) }
+    });
+  };
+
   return (
+    <div className="relative">
     <div className="flex items-center bg-[#F8FAFC] px-[16px] py-[8px] border-[1px] rounded-[8px] w-full">
       <IoSearchOutline color='grey'/>
       <input
@@ -51,6 +95,20 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
         className="bg-[#F8FAFC] outline-none flex-grow text-[#64748B] ml-[8px]"
       />
     </div>
+    {showSuggestions && (
+      <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded-b-lg mt-1 text-[#64748B]">
+        {suggestions.map((item, index) => (
+          <li
+            key={index}
+            onClick={() => handleSuggestionClick(item)}
+            className="py-1 px-3 cursor-pointer hover:bg-gray-100"
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
   );
 };
 
