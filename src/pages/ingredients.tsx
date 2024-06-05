@@ -51,7 +51,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
        <div className="flex flex-col h-screen justify-between">
            <NavBar brandName='Ingredients'/>
            <main className="flex-grow flex flex-col items-center">
-               <div className="py-[6px] w-full flex justify-center">
+                <div className="py-[6px] w-full flex justify-center">
                    <div className="flex flex-col items-center space-y-4">
                        {ingredientList.map((ingredient, index) => (
                            <div
@@ -81,7 +81,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
                <div className="ml-[16px] mr-[14px]">
                    <Link
                        href={{
-                           pathname: "store",
+                           pathname: "location",
                            query: { ingredients: preprocessIngredients(ingredientList) }
                        }}
                        className={`${color} ${pointerEvents} rounded-[48px] flex-grow w-[285px] h-[44px] py-[14px] items-center flex justify-center`}
