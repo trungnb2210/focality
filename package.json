@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
+    "@react-google-maps/api": "^2.19.3",
+    "@types/googlemaps": "^3.43.3",
     "@vercel/blob": "^0.23.3",
     "@vercel/postgres": "^0.8.0",
     "jest-environment-jsdom": "^29.7.0",
