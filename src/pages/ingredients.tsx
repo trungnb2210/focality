@@ -19,29 +19,19 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
    //TODO: Change ingredientList into set
 
    const removeIngredient = (index: number) => {
-    console.log(ingredientList, "HELLO")
-    //    const filteredIngredients = ingredientList.filter((_, idx) => idx !== index);
     setIngredientList((oldList) => oldList.filter((_, idx) => idx !== index));
-    //    console.log(ingredientList)
    };
 
     const changeIngredientList = (newName: string, index:number) => {
-        // console.log(ingredientList)
-        // let newList = [...ingredientList]
-        // newList[index] = newName
-        // console.log(newList)
+
         setIngredientList((oldList) => {
             let newList = [...oldList]
             newList[index] = newName
-            console.log(oldList)
-            console.log(newList)
             return newList
         })
-        // console.log(ingredientList)
     }
 
    const preprocessIngredients = (ingredientList: string[]) => {
-    console.log(ingredientList)
     // let newList = [...ingredientList].map(ingredient =>
     //         ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
     //     );

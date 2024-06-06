@@ -1,7 +1,7 @@
 import { IoClose } from "react-icons/io5"
 import React, { useState, useEffect } from 'react'
 import { queryDatabase } from '@/components/SearchBar';
-import { MultiSelect, Option } from "react-multi-select-component";
+// import { MultiSelect, Option } from "react-multi-select-component";
 
 
 
@@ -40,8 +40,6 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
     const fetchChoices = async () => {
         const choiceList = await queryDatabase(ingQuery);
         const nativeNames = choiceList.map((x: { nativeName: string; }) => x.nativeName)
-        // const choice: string[] = Array.isArray(choiceList) ? choiceList : [choiceList];
-        // console.log(nativeNames)
         const optionsArr = [ingredient].concat(nativeNames)
         // const options = optionsArr.map(x => {value: x, label: x})
         setQueryRes(optionsArr)
@@ -50,7 +48,6 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
         //     options.push({ label:element, value: element })
         // });
 
-        // console.log(options)
 
 
     };
