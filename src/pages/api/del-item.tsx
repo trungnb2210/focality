@@ -6,11 +6,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { iid } = req.query;
 
     try {
-      const itemId = iid as String
+      const itemId = iid;
       // Delete the item from the database based on the provided ID
       await prisma.item.delete({
         where: {
-            iid: itemId,
+            iid: itemId.toString(),
         },
       });
 
