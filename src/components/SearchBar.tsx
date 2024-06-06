@@ -3,9 +3,9 @@ import { IoSearchOutline } from "react-icons/io5";
 import { Item } from '@/pages/api/ingredients';
 
 interface searchBarProp {
-    placeholder: string;
-    initialIngredients: string[];
-    onSubmit: (ingredients: string[]) => void;
+  placeholder: string;
+  initialIngredients: string[];
+  onSubmit: (ingredients: string[]) => void;
 }
 
 export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredients, onSubmit }) => {
@@ -20,11 +20,11 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
     const ingredientNames = parseIngredients(searchTerm);
 
     try {
-        const formattedIngredients = await findSimilarIngredients(ingredientNames);
-        onSubmit(formattedIngredients)
-      } catch (error) {
-        console.error('Failed to query ingredients:', error);
-      }
+      const formattedIngredients = await findSimilarIngredients(ingredientNames);
+      onSubmit(formattedIngredients)
+    } catch (error) {
+      console.error('Failed to query ingredients:', error);
+    }
   };
 
   const fetchSuggestions = async (searchValue: string) => {
@@ -83,10 +83,15 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
 
   const handleConfirmSelection = () => {
     const cleanSuggestions = selectedSuggestions.map(suggestion => suggestion.replace(/ *\([^)]*\) */g, ''));
-    setSearchTerm('');
     setShowSuggestions(false);
     onSubmit(cleanSuggestions);
     setSelectedSuggestions([]);
+  };
+
+  const handleFocus = () => {
+    if (searchTerm.length > 1) {
+      setShowSuggestions(true);
+    }
   };
 
   return (
@@ -99,6 +104,7 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
         value={searchTerm}
         onChange={handleChange}
         onKeyPress={handleKeyPress}
+        onFocus={handleFocus}
         className="bg-[#F8FAFC] outline-none flex-grow text-[#64748B] ml-[8px]"
       />
     </div>
