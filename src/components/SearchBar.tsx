@@ -133,8 +133,10 @@ const parseIngredients = (input: string) => {
 };
 
 
-const queryDatabase = async (ingredient: string) => {
+export const queryDatabase = async (ingredient: string) => {
+  //need to try catch?
   const response = await fetch(`/api/ingredients?ingredient=${encodeURIComponent(ingredient)}`);
+  // console.log(response)
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
