@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { parse } from 'papaparse';
+import "../app/globals.css"
 
 export interface Item {
   iid: string;
@@ -281,8 +282,6 @@ export default function StoreSide() {
       <div className="mt-8">
         <h2 className="text-2xl font-bold mb-4">Upload Items (.csv)</h2>
         <form onSubmit={handleItemSubmit}>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
-          {success && <p className="text-green-500 mb-4">{success}</p>}
           <div className="mb-4">
             <label htmlFor="storeId" className="block text-sm font-medium text-gray-700">Store:</label>
             <select
@@ -349,7 +348,7 @@ export default function StoreSide() {
             id="items"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             onChange={(e) => setSelectedItemId(e.target.value)}
-            value={selectedItemId} // Add this line to ensure the selected value is reflected in the UI
+            value={selectedItemId}
           >
             <option value="" disabled>Select an item</option>
             {storeItems.map((item) => (

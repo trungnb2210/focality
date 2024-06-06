@@ -1,9 +1,16 @@
+import React, { useRef, useState } from 'react';
+import { useLoadScript, Autocomplete } from '@react-google-maps/api';
+import { Loader } from '@googlemaps/js-api-loader';
 import { GetServerSideProps } from 'next';
 import "../app/globals.css";
-import NavBar from '../components/NavBar';
-import React, { useState } from 'react';
-import prisma from '../../lib/prisma';
+import NavBar from '@/components/NavBar';
 import ItemComponent from '@/components/storeItem';
+import LocationInput from '@/components/LocationInput';
+import Link from 'next/link';
+import { FaPlus, FaShoppingCart } from 'react-icons/fa';
+import Router, { useRouter } from 'next/router';
+
+const libraries: Loader["libraries"] = ["places"];
 
 interface Item {
     iid: string;
@@ -29,96 +36,47 @@ interface Store {
 }
 
 interface ListOfStorePageProps {
-    stores: Store[];
+    initialStores: Store[];
     ingredients: string[];
-    currentLocation: string;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const { ingredients, currentLocation } = context.query;
+    const { ingredients } = context.query;
     const ingredientsArray = ingredients ? (Array.isArray(ingredients) ? ingredients : [ingredients]) : [];
-    const location = Array.isArray(currentLocation) ? currentLocation[0] : currentLocation;
-
-    const stores = await prisma.store.findMany({
-        where: {
-            items: {
-                some: {
-                    OR: ingredientsArray.map(ingredient => ({
-                        OR: [
-                            { name: { contains: ingredient, mode: 'insensitive' } },
-                            { nativeName: { contains: ingredient, mode: 'insensitive' } }
-                        ]
-                    }))
-                },
-            },
-        },
-        include: {
-            items: true,
-        },
-    });
-
-    const calculateDistance = async (address1: string, address2: string): Promise<number> => {
-        const api_key: string = "AIzaSyAZQITL5AWcrnNWaeh_zQpllcI-5fPGmC4";
-
-        const response1 = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address1}&key=${api_key}`);
-        const data1 = await response1.json();
-        const lat1 = data1.results[0]?.geometry?.location?.lat;
-        const lon1 = data1.results[0]?.geometry?.location?.lng;
-
-        const response2 = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address2}&key=${api_key}`);
-        const data2 = await response2.json();
-        const lat2 = data2.results[0]?.geometry?.location?.lat;
-        const lon2 = data2.results[0]?.geometry?.location?.lng;
-
-        const R = 6371;
-        const dLat = deg2rad(lat2 - lat1);
-        const dLon = deg2rad(lon2 - lon1);
-
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-        const c = 2 * Math.asin(Math.sqrt(a));
-
-        return R * c;
-    }
-
-    const deg2rad = (deg: number): number => {
-        return deg * (Math.PI / 180);
-    }
-
-    const storesWithDistance = await Promise.all(stores.map(async store => {
-        const distance = await calculateDistance(store.sortcode, location || "");
-        const availableItems = store.items.filter(item =>
-            ingredientsArray.some(ingredient =>
-                item.name.toLowerCase().includes(ingredient.toLowerCase()) ||
-                (item.nativeName && item.nativeName.toLowerCase().includes(ingredient.toLowerCase()))
-            )
-        );
-        const availableItemsName = availableItems.map(i => i.nativeName ? i.nativeName : i.name);
-        const unavailableItems = ingredientsArray.filter(ingredient =>
-            !store.items.some(item =>
-                item.name.toLowerCase().includes(ingredient.toLowerCase()) ||
-                (item.nativeName && item.nativeName.toLowerCase().includes(ingredient.toLowerCase()))
-            )
-        );
-        const matchedIngredients = availableItems.length;
-        return { ...store, availableItemsName, matchedIngredients, unavailableItems, distance };
-    }));
-
-    const sortedStores = storesWithDistance.sort((a, b) => b.matchedIngredients - a.matchedIngredients);
 
     return {
         props: {
-            stores: sortedStores,
+            initialStores: [],
             ingredients: ingredientsArray,
-            currentLocation: location,
         },
     };
 }
 
-const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ stores, ingredients, currentLocation }) => {
+const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingredients }) => {
+    const { isLoaded } = useLoadScript({
+        googleMapsApiKey: "AIzaSyAZQITL5AWcrnNWaeh_zQpllcI-5fPGmC4", // Make sure this is secured in production environments
+        libraries,
+    });
+
+    const router = useRouter();
+
+    const [stores, setStores] = useState<Store[]>(initialStores);
+    const [currentLocation, setCurrentLocation] = useState<string>("");
+
+    const fetchStores = async (location: string) => {
+        const ingredientsParam = encodeURIComponent(JSON.stringify(ingredients));
+        const locationParam = encodeURIComponent(location);
+        const response = await fetch(`/api/store?ingredients=${ingredientsParam}&currentLocation=${locationParam}`);
+        const data = await response.json();
+        setStores(data.stores);
+        setCurrentLocation(location);
+    };
+    
+
+    const handleLocationSelect = (location: string) => {
+        fetchStores(location);
+    };
+
     const [sortCriteria, setSortCriteria] = useState('matchedIngredients');
 
     const sortedStores = stores.sort((a, b) => {
@@ -128,30 +86,47 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ stores, ingredients, 
         return b.matchedIngredients - a.matchedIngredients;
     });
 
+    if (!isLoaded) return <div>Loading...</div>;
+
     return (
         <div className="flex flex-col h-screen">
-            <NavBar brandName='Stores List'/>
-            <main className="flex-grow flex flex-col justify-start  px-4 py-6">
-                <div className="mb-4 text-left font-medium w-2/3">
-                    <p className="content-fit p-2 inline rounded-2xl drop-shadow-sm">
-                        {currentLocation}
-                    </p>
+            <NavBar brandName='Stores List' />
+            <div className="p-4 drop-shadow-sm lg:flex lg:justify-between">
+                <div className="flex">
+                    <LocationInput onLocationSelect={handleLocationSelect} />
+                    <button
+                    onClick={() => router.push({ pathname: "/ingredients", query: { ingredients: ingredients } })}
+                    className="w-min h-min relative py-2 px-4 ml-2 rounded-full bg-[#EEF5DB] text-[#3E3F3B]
+                    hover:bg-[#3E3F3B] hover:text-[#EEF5DB] font-bold border-2 border-[#3E3F3B]
+                    flex items-center justify-center mt-2"
+                    >
+                        <FaShoppingCart/>
+                        {ingredients.length > 0 && (
+                            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-sm bg-red-600 text-white rounded-full px-2">
+                            {ingredients.length}
+                            </span>
+                        )}
+                    </button>
                 </div>
-                <div className="flex flex-row justify-between mb-4 sm:w-full">
-                    {/* <div className="flex-grow">
-                        <p>Currently sorted by: {sortCriteria === 'matchedIngredients' ? 'Matched Ingredients' : 'Distance'}</p>
-                    </div> */}
-                    <div className="flex-shrink-0">
-                        <select
-                            value={sortCriteria}
-                            onChange={(e) => setSortCriteria(e.target.value)}
-                            className="content-fit p-2 inline rounded-2xl drop-shadow-sm"
-                        >
-                            <option value="matchedIngredients">Sort by Available Ingredient</option>
-                            <option value="distance">Sort by Distance</option>
-                        </select>
+                <div className="flex-shrink-0">
+                    <select
+                        value={sortCriteria}
+                        onChange={(e) => setSortCriteria(e.target.value)}
+                        className="content-fit p-2 inline rounded-2xl drop-shadow-sm"
+                    >
+                        <option value="matchedIngredients">Sort by Available Ingredient</option>
+                        <option value="distance">Sort by Distance</option>
+                    </select>
+                </div>
+            </div>
+            <main className="flex-grow flex flex-col justify-start px-4 py-6 mb-12">
+                {/* {currentLocation && (
+                    <div className="mb-4 text-left font-medium w-2/3">
+                        <p className="content-fit p-2 inline rounded-2xl drop-shadow-sm">
+                            {currentLocation}
+                        </p>
                     </div>
-                </div>
+                )} */}
                 <div className="w-full flex flex-col items-center space-y-4">
                     {sortedStores.map((store) => (
                         <ItemComponent key={store.sid} store={store} ingredients={ingredients} distance={store.distance} />
@@ -160,7 +135,23 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ stores, ingredients, 
                         <p className="text-center text-gray-600 mt-8">No stores found for the given ingredients.</p>
                     )}
                 </div>
+                <div className="mb-12"></div>
             </main>
+            <footer className="w-full flex justify-center items-center py-2 fixed bottom-0
+           left-0 right-0 bg-white drop-shadow-4xl backdrop-filter backdrop-blur-lg bg-opacity-40">
+                <Link
+                    href={{
+                        pathname: "search",
+                        query: { ingredients: ingredients }
+                    }}
+                    className="p-2 px-4 rounded-[67px] bg-red-600
+                    text-white items-center flex justify-center hover:bg-red-300 hover:text-white
+                    drop-shadow-2xl"
+                >
+                    <div className="font-semibold">More Ingredient</div>
+                    {/* <FaPlus size={20} /> */}
+                </Link>
+           </footer>
         </div>
     );
 };
