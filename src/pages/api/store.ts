@@ -2,19 +2,17 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 
 const calculateDistance = async (address1: string, address2: string): Promise<number> => {
-    const api_key: string = "AIzaSyAZQITL5AWcrnNWaeh_zQpllcI-5fPGmC4";
+    const api_key: string = process.env.GOOGLE_MAP_API_KEY? process.env.GOOGLE_MAP_API_KEY: "";
 
     const response1 = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address1}&key=${api_key}`);
     const data1 = await response1.json();
     const lat1 = data1.results[0]?.geometry?.location?.lat;
     const lon1 = data1.results[0]?.geometry?.location?.lng;
-    console.log("lat1 and lon1 is" + lat1 + lon1)
 
     const response2 = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address2}&key=${api_key}`);
     const data2 = await response2.json();
     const lat2 = data2.results[0]?.geometry?.location?.lat;
     const lon2 = data2.results[0]?.geometry?.location?.lng;
-    console.log("lat2 and lon2 is" + lat2 + lon2)
 
     const R = 6371;
     const dLat = deg2rad(lat2 - lat1);
@@ -54,8 +52,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 some: {
                     OR: ingredientsArray.map(ingredient => ({
                         OR: [
-                            { name: { contains: ingredient, mode: 'insensitive' } },
-                            { nativeName: { contains: ingredient, mode: 'insensitive' } }
+                            { nativeName: { contains: ingredient, mode: 'insensitive' } },
+                            { name: { contains: ingredient, mode: 'insensitive' } }
                         ]
                     }))
                 },
@@ -85,11 +83,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return { ...store, availableItemsName, matchedIngredients, unavailableItems, distance };
     }));
 
-    console.log("Stores with distance: ", storesWithDistance);
-
     const sortedStores = storesWithDistance.sort((a, b) => b.matchedIngredients - a.matchedIngredients);
-
-    console.log("Sorted stores: ", sortedStores);
 
     res.status(200).json({ stores: sortedStores });
 };

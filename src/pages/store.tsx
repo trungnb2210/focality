@@ -7,7 +7,8 @@ import NavBar from '@/components/NavBar';
 import ItemComponent from '@/components/storeItem';
 import LocationInput from '@/components/LocationInput';
 import Link from 'next/link';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaShoppingCart } from 'react-icons/fa';
+import Router, { useRouter } from 'next/router';
 
 const libraries: Loader["libraries"] = ["places"];
 
@@ -57,6 +58,8 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
         libraries,
     });
 
+    const router = useRouter();
+
     const [stores, setStores] = useState<Store[]>(initialStores);
     const [currentLocation, setCurrentLocation] = useState<string>("");
 
@@ -89,7 +92,22 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
         <div className="flex flex-col h-screen">
             <NavBar brandName='Stores List' />
             <div className="p-4 drop-shadow-sm lg:flex lg:justify-between">
-                <LocationInput onLocationSelect={handleLocationSelect} />
+                <div className="flex">
+                    <LocationInput onLocationSelect={handleLocationSelect} />
+                    <button
+                    onClick={() => router.push({ pathname: "/ingredients", query: { ingredients: ingredients } })}
+                    className="w-min h-min relative py-2 px-4 ml-2 rounded-full bg-[#EEF5DB] text-[#3E3F3B]
+                    hover:bg-[#3E3F3B] hover:text-[#EEF5DB] font-bold border-2 border-[#3E3F3B]
+                    flex items-center justify-center mt-2"
+                    >
+                        <FaShoppingCart/>
+                        {ingredients.length > 0 && (
+                            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-sm bg-red-600 text-white rounded-full px-2">
+                            {ingredients.length}
+                            </span>
+                        )}
+                    </button>
+                </div>
                 <div className="flex-shrink-0">
                     <select
                         value={sortCriteria}

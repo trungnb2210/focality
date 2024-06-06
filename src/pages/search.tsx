@@ -7,7 +7,6 @@ import NavBar from '@/components/NavBar';
 import { SearchBar } from '@/components/SearchBar';
 import { FaShoppingCart } from "react-icons/fa";
 import { IoClose } from 'react-icons/io5';
-import Link from 'next/link';
 
 const SearchIngredientPage: React.FC = () => {
   const router = useRouter();

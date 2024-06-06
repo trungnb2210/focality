@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/prisma'; // Adjust the path as needed
+import prisma from '../../../lib/prisma';
 
 export interface Item {
     iid: string;
@@ -13,10 +13,10 @@ export interface Item {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { ingredient } = req.query;
-
   if (typeof ingredient !== 'string') {
     return res.status(400).json({ error: 'Invalid query parameter' });
   }
+
 
   try {
     const results = await prisma.item.findMany({
@@ -38,6 +38,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     });
 
+
     const itemMap = new Map();
     results.forEach(item => {
         let n = item.nativeName? item.nativeName: item.name;
@@ -55,6 +56,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const items: Item[] = Array.from(itemMap.values())
+    // console.log(items)
 
     res.status(200).json(items);
   } catch (error) {
