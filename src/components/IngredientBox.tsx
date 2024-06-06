@@ -22,9 +22,14 @@ type IngredientProp = {
 // const 
 
 const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, removeMethod, changeMethod}) => {
+    const originalItem = JSON.parse(JSON.stringify(ingredient));
+
     const [expand, setExpand] = useState(false)
     const [queryRes, setQueryRes] = useState<string[]>([])
     const [ingredientName, setIngredientName] = useState<string>(ingredient)
+
+    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
     // const [options, setOptions] = useState<Option[]>([])
     // const [selected, setSelected] = useState([]);
 
@@ -53,8 +58,46 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
     };
 
     const handleChange = (qr: string, i: number) => {
-        setIngredientName(qr)
+        // console.log(qr)
+
+        if (qr.startsWith("Any ")) {
+            if (selectedOptions === queryRes) {
+                setSelectedOptions([])
+            } else {
+                setSelectedOptions(queryRes)
+                setIngredientName(qr)
+            }
+            
+
+        } else {
+            setSelectedOptions((oldList) => {
+                let newList = [...oldList]
+                if (newList.includes(qr)) {
+                    newList = newList.filter(x => x !== qr)
+                    if (newList.length == 0) {
+                        newList = originalItem
+                    }
+                } else {
+                    newList = [...newList, qr]
+                }
+                setIngredientName((old) => newList.toString().length < 34 ? newList.toString() : newList.toString().slice(0, 33).concat("..."))
+                // console.log(newList)
+    
+                // prev.includes(qr) ? prev.filter(item => item !== qr) : [...prev, qr]
+                return newList
+            });
+        }
+        
         changeMethod(qr, i)
+
+
+        // console.log(selectedOptions)
+
+        // console.log(selectedOptions)
+        
+        // setIngredientName(qr)
+        // setIngredientName((old) => selectedOptions.toString())
+
     }
 
     const handleExpand = () => {
@@ -62,8 +105,10 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
             fetchChoices()
         }
         setExpand(!expand)
-    }
 
+    }
+    
+ 
     return (
         <div
         // key={index}
@@ -91,7 +136,12 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
             {expand &&
                 <div className="bg-white border rounded-lg">
                     <ul>
-                        {queryRes.map((qr, i) => <li className="pl-5 hover:bg-[#3E3F3B] hover:text-[#EEF5DB]" key={i} onClick={()=>handleChange(qr, index)}>{qr}</li>)}
+                        {queryRes.map((qr, i) => 
+                            <li 
+                                // className="pl-5 text-black hover:bg-[#B8D8D8] flex items-center ${selectedSuggestions.includes(qr) ? 'hover:bg-[#B8D8D8]' : 'hover:bg-gray-100'}" 
+                                className={`py-1 px-3 cursor-pointer flex items-center ${selectedOptions.includes(qr) ? 'bg-[#B8D8D8]' : 'hover:bg-gray-200'}`}
+                                key={i} 
+                                onClick={()=>handleChange(qr, index)}>{qr}</li>)}
                     </ul> 
                     {/* <MultiSelect
                         options={options}
