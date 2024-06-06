@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { IoSearchOutline } from "react-icons/io5";
-import { useRouter } from 'next/router';
 import { Item } from '@/pages/api/ingredients';
 
 interface searchBarProp {
@@ -16,8 +15,6 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
-
-    setSearchTerm('');
     setShowSuggestions(false);
     const ingredientNames = parseIngredients(searchTerm);
 
@@ -31,16 +28,27 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
 
   const fetchSuggestions = async (searchValue: string) => {
     if (searchValue.length > 1) {
-      const matches = await queryDatabase(searchValue);
-      const items: Item[] = Array.isArray(matches) ? matches : [matches];
-      const itemsShown = 5;
-      const formattedItems = items.map(item =>
-        item.nativeName
-          ? item.nativeName + ' (' + item.name + ')'
-          : item.name
-      ).slice(0, itemsShown);
-      setSuggestions(formattedItems);
-      setShowSuggestions(true);
+      const ingredients = parseIngredients(searchValue);
+      const itemsSet = new Set<string>();
+
+      for (const ingredient of ingredients) {
+        const matches = await queryDatabase(ingredient);
+        const matchesArray: Item[] = Array.isArray(matches) ? matches : [matches];
+        const itemsShown = 10;
+        const formattedItems = matchesArray.map(item => 
+          item.nativeName 
+            ? item.nativeName + ' (' + item.name + ')'
+            : item.name
+        ).slice(0, itemsShown);
+        
+        formattedItems.forEach(item => itemsSet.add(item));
+      }
+      if (itemsSet.size > 0) {
+        setSuggestions(Array.from(itemsSet));
+        setShowSuggestions(true);
+      } else {
+        setShowSuggestions(false);
+      }
     } else {
       setShowSuggestions(false);
     }
@@ -69,9 +77,10 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
   };
 
   const handleSuggestionClick = (suggestion: string) => {
+    const cleanSuggestion = suggestion.replace(/ *\([^)]*\) */g, '');
     setSearchTerm('');
     setShowSuggestions(false);
-    onSubmit([suggestion]);
+    onSubmit([cleanSuggestion]);
   };
 
   return (
