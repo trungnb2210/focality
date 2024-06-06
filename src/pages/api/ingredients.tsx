@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/prisma'; // Adjust the path as needed
+import prisma from '../../../lib/prisma';
 
 export interface Item {
     iid: string;
