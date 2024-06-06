@@ -11,6 +11,9 @@
     "test": "jest"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.19",
     "@prisma/client": "^5.14.0",
     "@react-google-maps/api": "^2.19.3",
     "@types/googlemaps": "^3.43.3",
