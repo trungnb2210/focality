@@ -50,7 +50,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
    return (
        <div className="flex flex-col h-screen justify-between">
            <NavBar brandName='Ingredients'/>
-           <main className="flex-grow flex flex-col items-center">
+           <main className="flex-grow flex flex-col items-center mb-6">
                 <div className="py-[6px] w-full flex justify-center">
                    <div className="flex flex-col items-center space-y-4">
                        {ingredientList.map((ingredient, index) => (
@@ -77,28 +77,31 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
                    </div>
                </div>
            </main>
-           <footer className="w-full flex justify-center items-center mb-[25px]">
-               <div className="ml-[16px] mr-[14px]">
-                   <Link
-                       href={{
-                           pathname: "store",
-                           query: { ingredients: preprocessIngredients(ingredientList) }
-                       }}
-                       className={`py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold`}
-                   >
-                       Find Store
-                   </Link>
-               </div>
-               <Link
-                   href={{
-                       pathname: "search",
-                       query: { ingredients: ingredientList }
-                   }}
-                   className="p-2 rounded-[67px] bg-red-600
-                   text-white items-center flex justify-center hover:bg-red-300 hover:text-white"
-               >
-                   <FaPlus size={20} />
-               </Link>
+           <footer className="w-full flex justify-center items-center py-2 fixed bottom-0
+           left-0 right-0 bg-white drop-shadow-4xl backdrop-filter backdrop-blur-lg bg-opacity-40">
+                <Link
+                    href={{
+                        pathname: "search",
+                        query: { ingredients: ingredientList }
+                    }}
+                    className="p-2 rounded-[67px] bg-red-600
+                    text-white items-center flex justify-center hover:bg-red-300 hover:text-white
+                    drop-shadow-2xl"
+                >
+                    <FaPlus size={20} />
+                </Link>
+                <div className="ml-2 mr-[14px]">
+                    <Link
+                        href={{
+                            pathname: "store",
+                            query: { ingredients: preprocessIngredients(ingredientList) }
+                        }}
+                        className={`py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold
+                        drop-shadow-2xl`}
+                    >
+                        Find Store
+                    </Link>
+                </div>
            </footer>
        </div>
    );

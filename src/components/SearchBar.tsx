@@ -17,6 +17,8 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
 
+    setSearchTerm('');
+    setShowSuggestions(false);
     const ingredientNames = parseIngredients(searchTerm);
 
     try {
