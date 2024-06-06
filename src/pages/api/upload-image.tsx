@@ -1,11 +1,11 @@
 import { put } from '@vercel/blob';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const config = {
-    runtime: 'edge',
-  };
+  runtime: 'edge',
+};
 
-export default async function upload(request, response) {
+export default async function upload(request: NextRequest, response: NextResponse) {
   try {
     const form = await request.formData();
     const file = form.get('file') as File;
