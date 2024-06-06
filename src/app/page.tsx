@@ -14,7 +14,17 @@ export default async function Home() {
         }}
         className="font-semibold p-3 rounded-xl bg-[#EEF5DB] text-[#3E3F3B] hover:bg-[#3E3F3B] 
         hover:text-[#EEF5DB] border-2 border-[#3E3F3B]">
-            Select Ingredients
+            I am a user
+        </Link>
+        <Link href={{
+            pathname: "storeside",
+            // query: {
+            //     ingredient
+            // }
+        }}
+        className="font-semibold p-3 rounded-xl bg-[#EEF5DB] text-[#3E3F3B] hover:bg-[#3E3F3B] 
+        hover:text-[#EEF5DB] border-2 border-[#3E3F3B]">
+            I am a store owner
         </Link>
     </main>
   );

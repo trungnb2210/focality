@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 
 const calculateDistance = async (address1: string, address2: string): Promise<number> => {
-    const api_key: string = process.env.REACT_APP_API_KEY? process.env.REACT_APP_API_KEY: "";
+    const api_key: string = process.env.GOOGLE_MAP_API_KEY? process.env.GOOGLE_MAP_API_KEY: "";
 
     const response1 = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address1}&key=${api_key}`);
     const data1 = await response1.json();
