@@ -4,10 +4,11 @@ import { Item } from '@/pages/api/ingredients';
 
 interface searchBarProp {
   placeholder: string;
+  initialIngredients: string[];
   onSubmit: (ingredients: string[]) => void;
 }
 
-export const SearchBar: React.FC<searchBarProp> = ({ placeholder, onSubmit }) => {
+export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredients, onSubmit }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
