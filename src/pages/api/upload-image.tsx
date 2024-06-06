@@ -15,6 +15,6 @@ export default async function upload(request: NextRequest, response: NextRespons
   } catch (error) {
     console.error('Error uploading file:', error);
     
-    return NextResponse.error(new Error('Failed to upload file'));
+    return NextResponse.error();
   }
 }
