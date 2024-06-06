@@ -11,7 +11,7 @@ import Link from 'next/link';
 
 const SearchIngredientPage: React.FC = () => {
   const router = useRouter();
-  const initialFrequent = ['Prahok', 'Nam Pla', 'Basmati Rice', 'Jasmine Rice', 'Nuoc Mam'];
+  const initialFrequent = ['Prahok', 'Nam Pla', 'Basmati Rice'];
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [frequent, setFrequent] = useState(initialFrequent);
   const [hoverStates, setHoverStates] = useState<boolean[]>([]);

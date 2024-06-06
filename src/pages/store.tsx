@@ -4,9 +4,10 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { GetServerSideProps } from 'next';
 import "../app/globals.css";
 import NavBar from '@/components/NavBar';
-import prisma from '../../lib/prisma';
 import ItemComponent from '@/components/storeItem';
 import LocationInput from '@/components/LocationInput';
+import Link from 'next/link';
+import { FaPlus } from 'react-icons/fa';
 
 const libraries: Loader["libraries"] = ["places"];
 
@@ -100,7 +101,7 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
                     </select>
                 </div>
             </div>
-            <main className="flex-grow flex flex-col justify-start px-4 py-6">
+            <main className="flex-grow flex flex-col justify-start px-4 py-6 mb-12">
                 {/* {currentLocation && (
                     <div className="mb-4 text-left font-medium w-2/3">
                         <p className="content-fit p-2 inline rounded-2xl drop-shadow-sm">
@@ -116,7 +117,23 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
                         <p className="text-center text-gray-600 mt-8">No stores found for the given ingredients.</p>
                     )}
                 </div>
+                <div className="mb-12"></div>
             </main>
+            <footer className="w-full flex justify-center items-center py-2 fixed bottom-0
+           left-0 right-0 bg-white drop-shadow-4xl backdrop-filter backdrop-blur-lg bg-opacity-40">
+                <Link
+                    href={{
+                        pathname: "search",
+                        query: { ingredients: ingredients }
+                    }}
+                    className="p-2 px-4 rounded-[67px] bg-red-600
+                    text-white items-center flex justify-center hover:bg-red-300 hover:text-white
+                    drop-shadow-2xl"
+                >
+                    <div className="font-semibold">More Ingredient</div>
+                    {/* <FaPlus size={20} /> */}
+                </Link>
+           </footer>
         </div>
     );
 };
