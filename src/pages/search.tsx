@@ -23,6 +23,14 @@ const SearchIngredientPage: React.FC = () => {
     }
   }, [router.query]);
 
+  const preprocessIngredients = (ingredientList: string[]) => {
+    let newList = [...ingredientList].map(ingredient =>
+            ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
+        );
+
+    return newList;
+   };
+
   const removeIngredient = (index: number) => {
     const ingredient = selectedIngredients[index];
     setSelectedIngredients(prev => prev.filter((_, idx) => idx !== index));
@@ -110,7 +118,8 @@ const SearchIngredientPage: React.FC = () => {
             </span>
           )}
         </button>
-        <button onClick={() => router.push({ pathname: "/store", query: { ingredients: selectedIngredients } })} className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold">Find Store</button>
+        <button onClick={() => router.push({ pathname: "/store", query: { ingredients: preprocessIngredients(selectedIngredients) } })} 
+        className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold">Find Store</button>
       </footer>
     </div>
   );
