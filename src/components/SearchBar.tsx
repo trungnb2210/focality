@@ -4,11 +4,10 @@ import { Item } from '@/pages/api/ingredients';
 
 interface searchBarProp {
   placeholder: string;
-  initialIngredients: string[];
   onSubmit: (ingredients: string[]) => void;
 }
 
-export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredients, onSubmit }) => {
+export const SearchBar: React.FC<searchBarProp> = ({ placeholder, onSubmit }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -82,9 +81,8 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
   };
 
   const handleConfirmSelection = () => {
-    const cleanSuggestions = selectedSuggestions.map(suggestion => suggestion.replace(/ *\([^)]*\) */g, ''));
     setShowSuggestions(false);
-    onSubmit(cleanSuggestions);
+    onSubmit(selectedSuggestions);
     setSelectedSuggestions([]);
   };
 
