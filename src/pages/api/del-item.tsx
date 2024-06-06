@@ -6,13 +6,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { iid } = req.query;
 
     try {
-      const itemId = iid;
-      // Delete the item from the database based on the provided ID
-      await prisma.item.delete({
-        where: {
-            iid: itemId.toString(),
-        },
-      });
+        if (!iid) {
+            throw new Error('Item ID is missing');
+          }
+    
+          const itemId = iid.toString(); 
+          // Delete the item from the database based on the provided ID
+          await prisma.item.delete({
+            where: {
+              iid: itemId,
+            },
+          });
 
       // Send a success response
       res.status(200).json({ message: 'Item deleted successfully' });
