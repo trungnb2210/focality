@@ -12,6 +12,7 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
   const [searchTerm, setSearchTerm] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([]);
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
@@ -77,10 +78,17 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
   };
 
   const handleSuggestionClick = (suggestion: string) => {
-    const cleanSuggestion = suggestion.replace(/ *\([^)]*\) */g, '');
+    setSelectedSuggestions(prev =>
+      prev.includes(suggestion) ? prev.filter(item => item !== suggestion) : [...prev, suggestion]
+    );
+  };
+
+  const handleConfirmSelection = () => {
+    const cleanSuggestions = selectedSuggestions.map(suggestion => suggestion.replace(/ *\([^)]*\) */g, ''));
     setSearchTerm('');
     setShowSuggestions(false);
-    onSubmit([cleanSuggestion]);
+    onSubmit(cleanSuggestions);
+    setSelectedSuggestions([]);
   };
 
   return (
@@ -97,19 +105,25 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
       />
     </div>
     {showSuggestions && (
-      <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded-b-lg mt-1 text-[#64748B]">
-        {suggestions.map((item, index) => (
-          <li
-            key={index}
-            onClick={() => handleSuggestionClick(item)}
-            className="py-1 px-3 cursor-pointer hover:bg-gray-100"
-          >
-            {item}
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
+        <div className="absolute z-10 w-full bg-white border border-gray-200 rounded-b-lg mt-1 text-[#64748B]">
+          <ul>
+            {suggestions.map((item, index) => (
+              <li
+                key={index}
+                onClick={() => handleSuggestionClick(item)}
+                className={`py-1 px-3 cursor-pointer flex items-center ${selectedSuggestions.includes(item) ? 'bg-gray-200' : 'hover:bg-gray-100'}`}
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+          <button onClick={handleConfirmSelection} className="py-1 px-3 cursor-pointer rounded-b-lg bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black w-full">
+            Confirm Selection
+          </button>
+        </div>
+      )}
+    </div>
+
   );
 };
 
