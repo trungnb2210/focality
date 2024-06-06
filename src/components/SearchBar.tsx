@@ -6,26 +6,22 @@ import { Item } from '@/pages/api/ingredients';
 interface searchBarProp {
     placeholder: string;
     initialIngredients: string[];
+    onSubmit: (ingredients: string[]) => void;
 }
 
-export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredients }) => {
+export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredients, onSubmit }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [showSuggestions, setShowSuggestions] = useState(false); // Controls dropdown visibility
-  const [suggestions, setSuggestions] = useState<string[]>([]); 
-  const router = useRouter();
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
 
     const ingredientNames = parseIngredients(searchTerm);
-    console.log('Parsed Ingredients:', ingredientNames);
 
     try {
         const formattedIngredients = await findSimilarIngredients(ingredientNames);
-        router.push({
-          pathname: '/ingredients',
-          query: { ingredients: initialIngredients.concat(formattedIngredients) }
-        });
+        onSubmit(formattedIngredients)
       } catch (error) {
         console.error('Failed to query ingredients:', error);
       }
@@ -36,8 +32,8 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
       const matches = await queryDatabase(searchValue);
       const items: Item[] = Array.isArray(matches) ? matches : [matches];
       const itemsShown = 5;
-      const formattedItems = items.map(item => 
-        item.nativeName 
+      const formattedItems = items.map(item =>
+        item.nativeName
           ? item.nativeName + ' (' + item.name + ')'
           : item.name
       ).slice(0, itemsShown);
@@ -48,7 +44,6 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
     }
   };
 
-  // Used to delay constant queries while user is typing
   const debounce = (func: (...args: any[]) => void, wait: number) => {
     let timeout: NodeJS.Timeout;
     return (...args: any[]) => {
@@ -57,8 +52,7 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
     };
   };
 
-  // Can change delay after typing before suggestions appear
-  const debouncedFetchSuggestions = useCallback(debounce(fetchSuggestions, 200), []); 
+  const debouncedFetchSuggestions = useCallback(debounce(fetchSuggestions, 200), []);
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value;
@@ -73,13 +67,9 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
   };
 
   const handleSuggestionClick = (suggestion: string) => {
-    setSearchTerm(suggestion);
+    setSearchTerm('');
     setShowSuggestions(false);
-    
-    router.push({
-      pathname: '/ingredients',
-      query: { ingredients: initialIngredients.concat([suggestion]) }
-    });
+    onSubmit([suggestion]);
   };
 
   return (
@@ -117,7 +107,7 @@ const parseIngredients = (input: string) => {
   const notesPattern = /\([^)]*\)/g;
   const numbersPattern = /[0-9/\.]+/g;
   const unitsPattern = /\b(?:cm|oz|tsp|tbsp|tbs|cup|cups|ml|l|kg|g|pound|cloves|slice|slices|oz|stalks|inch|inches|piece|pieces|bunch|bunches|ounces|tablespoons|minced)\b/gi;
-  const descriptors = /\b(?:peeled|deveined|crushed|chopped|sliced|cut|diced|torn|low|high|sodium|fresh|roughly|into|optional|to|plus|half|cooked|uncooked|g|serve|thinly|in|lengthwise)\b/gi;
+  const descriptors = /\b(?:of|peeled|deveined|crushed|chopped|sliced|cut|diced|torn|low|high|sodium|fresh|roughly|into|optional|to|plus|half|cooked|uncooked|g|serve|thinly|in|lengthwise)\b/gi;
 
   return input
     .replace(unwantedChars, '')
@@ -149,11 +139,9 @@ const findSimilarIngredients = async (ingredientArray: string[]) => {
     if (matches.length > 1) {
         const titleCasedIngredient = toTitleCase(ingredient);
         result.push("Any " + titleCasedIngredient);
-    } else if (matches.length == 1) {
+    } else {
         const titleCasedIngredient = toTitleCase(ingredient);
         result.push(titleCasedIngredient);
-    } else {
-        alert(`${ingredient} not found in database`)
     }
   }
   return result;

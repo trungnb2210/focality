@@ -81,10 +81,10 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
                <div className="ml-[16px] mr-[14px]">
                    <Link
                        href={{
-                           pathname: "location",
+                           pathname: "store",
                            query: { ingredients: preprocessIngredients(ingredientList) }
                        }}
-                       className={`${color} ${pointerEvents} rounded-[48px] flex-grow w-[285px] h-[44px] py-[14px] items-center flex justify-center`}
+                       className={`py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold`}
                    >
                        Find Store
                    </Link>
@@ -94,9 +94,10 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
                        pathname: "search",
                        query: { ingredients: ingredientList }
                    }}
-                   className="w-[44px] h-[44px] py-[14px] px-[16px] rounded-[67px] bg-[#4F6367] text-white items-center flex justify-center hover:bg-[#B8D8D8] hover:text-white"
+                   className="p-2 rounded-[67px] bg-red-600
+                   text-white items-center flex justify-center hover:bg-red-300 hover:text-white"
                >
-                   <FaPlus size={24} />
+                   <FaPlus size={20} />
                </Link>
            </footer>
        </div>
