@@ -85,6 +85,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const deg2rad = (deg: number): number => {
+        const changeIngredientList = (newName: string, index:number) => {
+            console.log(ingredientList)
+            let newList = ingredientList
+            newList[index] = newName
+            setIngredientList(newList)
+            console.log(ingredientList)
+        }
         return deg * (Math.PI / 180);
     }
 

@@ -19,22 +19,36 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
    //TODO: Change ingredientList into set
 
    const removeIngredient = (index: number) => {
-       const filteredIngredients = ingredientList.filter((_, idx) => idx !== index);
-       setIngredientList(filteredIngredients);
+    console.log(ingredientList, "HELLO")
+    //    const filteredIngredients = ingredientList.filter((_, idx) => idx !== index);
+    setIngredientList((oldList) => oldList.filter((_, idx) => idx !== index));
+    //    console.log(ingredientList)
    };
 
     const changeIngredientList = (newName: string, index:number) => {
-        console.log(ingredientList)
-        let newList = ingredientList
-        newList[index] = newName
-        setIngredientList(newList)
-        console.log(ingredientList)
+        // console.log(ingredientList)
+        // let newList = [...ingredientList]
+        // newList[index] = newName
+        // console.log(newList)
+        setIngredientList((oldList) => {
+            let newList = [...oldList]
+            newList[index] = newName
+            console.log(oldList)
+            console.log(newList)
+            return newList
+        })
+        // console.log(ingredientList)
     }
 
    const preprocessIngredients = (ingredientList: string[]) => {
-    return ingredientList.map(ingredient =>
-            ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
-        );
+    console.log(ingredientList)
+    // let newList = [...ingredientList].map(ingredient =>
+    //         ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
+    //     );
+
+    setIngredientList((oldList) => oldList.map(ingredient =>
+        ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
+    ));
    };
 
    const findStoreButton = ingredientList.length === 0;
@@ -56,11 +70,11 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
                </div>
            </main>
            <footer className="w-full flex justify-center items-center mb-[25px]">
-               <div className="ml-[16px] mr-[14px]">
+               <div className="ml-[16px] mr-[14px]" onClick={() =>preprocessIngredients(ingredientList)}>
                    <Link
                        href={{
                            pathname: "location",
-                           query: { ingredients: preprocessIngredients(ingredientList) }
+                           query: { ingredients: ingredientList }
                        }}
                        className={`${color} ${pointerEvents} rounded-[48px] flex-grow w-[285px] h-[44px] py-[14px] items-center flex justify-center`}
                    >
