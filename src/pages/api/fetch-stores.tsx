@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
+import { Store } from '../storeside';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const stores = await prisma.store.findMany();
+    const stores = await prisma.store.findMany() as Store[];
     res.status(200).json(stores);
   } catch (error) {
     console.error(error);

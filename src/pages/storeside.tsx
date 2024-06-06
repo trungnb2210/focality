@@ -3,6 +3,25 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { parse } from 'papaparse';
 
+export interface Item {
+  iid: string;
+  name: string;
+  nativeName: string;
+  price: number;
+  imageUrl: string;
+  description: string;
+  storeId: string;
+  store: Store;
+}
+
+export interface Store {
+  sid: string;
+  name: string | null;
+  sortcode: string;
+  imageUrl: string;
+  items: Item[];
+}
+
 export default function StoreSide() {
   const [name, setName] = useState('');
   const [nativeName, setNativeName] = useState('');
@@ -10,11 +29,11 @@ export default function StoreSide() {
   const [image, setImage] = useState<File | null>(null);
   const [description, setDescription] = useState('');
   const [storeId, setStoreId] = useState('');
-  const [stores, setStores] = useState([]);
+  const [stores, setStores] = useState<Store[]>([]);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [itemsCsv, setItemsCsv] = useState<File | null>(null);
-  const [storeItems, setStoreItems] = useState([]);
+  const [storeItems, setStoreItems] = useState<Item[]>([]);
   const [selectedItemId, setSelectedItemId] = useState('');
   const router = useRouter();
 
@@ -108,7 +127,7 @@ export default function StoreSide() {
         if (event.target) {
           const csvData = event.target.result as string;
           const parsedData = parse(csvData, { header: true });
-          const items = parsedData.data;
+          const items : Item[] = parsedData.data as Item[];
   
           const selectedStore = stores.find((store) => store.sid === storeId);
           const selectedStoreId = selectedStore ? selectedStore.sid : '';
@@ -116,7 +135,7 @@ export default function StoreSide() {
           const itemAddPromises = [];
   
           for (const item of items) {
-            const price = parseFloat(item.price);
+            const price = item.price;
             const imageUrl = "https://gedhuiyjqbzrvz6n.public.blob.vercel-storage.com/ingredients/item_default-ZTc4HHFitsmUuquJz898puf6XoHrTh.jpg";
             const response = await fetch('/api/add-item', {
               method: 'POST',
