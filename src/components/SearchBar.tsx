@@ -1,46 +1,53 @@
 import React, { useState, useCallback } from 'react';
 import { IoSearchOutline } from "react-icons/io5";
-import { useRouter } from 'next/router';
 import { Item } from '@/pages/api/ingredients';
 
 interface searchBarProp {
-    placeholder: string;
-    initialIngredients: string[];
-    onSubmit: (ingredients: string[]) => void;
+  placeholder: string;
+  initialIngredients: string[];
+  onSubmit: (ingredients: string[]) => void;
 }
 
 export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredients, onSubmit }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([]);
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
-
-    setSearchTerm('');
     setShowSuggestions(false);
     const ingredientNames = parseIngredients(searchTerm);
 
     try {
-        const formattedIngredients = await findSimilarIngredients(ingredientNames);
-        onSubmit(formattedIngredients)
-      } catch (error) {
-        console.error('Failed to query ingredients:', error);
-      }
+      const formattedIngredients = await findSimilarIngredients(ingredientNames);
+      onSubmit(formattedIngredients)
+    } catch (error) {
+      console.error('Failed to query ingredients:', error);
+    }
   };
 
   const fetchSuggestions = async (searchValue: string) => {
     if (searchValue.length > 1) {
-      const matches = await queryDatabase(searchValue);
-      const items: Item[] = Array.isArray(matches) ? matches : [matches];
-      const itemsShown = 5;
-      const formattedItems = items.map(item =>
-        item.nativeName
-          ? item.nativeName
-          : item.name
-      ).slice(0, itemsShown);
-      setSuggestions(formattedItems);
-      setShowSuggestions(true);
+      const ingredients = parseIngredients(searchValue);
+      const itemsSet = new Set<string>();
+
+      for (const ingredient of ingredients) {
+        const matches = await queryDatabase(ingredient);
+        const matchesArray: Item[] = Array.isArray(matches) ? matches : [matches];
+        const formattedItems = matchesArray.map(item => 
+          item.nativeName 
+            ? item.nativeName
+            : item.name)
+        
+        formattedItems.forEach(item => itemsSet.add(item));
+      }
+      if (itemsSet.size > 0) {
+        setSuggestions(Array.from(itemsSet));
+        setShowSuggestions(true);
+      } else {
+        setShowSuggestions(false);
+      }
     } else {
       setShowSuggestions(false);
     }
@@ -69,9 +76,21 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
   };
 
   const handleSuggestionClick = (suggestion: string) => {
-    setSearchTerm('');
+    setSelectedSuggestions(prev =>
+      prev.includes(suggestion) ? prev.filter(item => item !== suggestion) : [...prev, suggestion]
+    );
+  };
+
+  const handleConfirmSelection = () => {
     setShowSuggestions(false);
-    onSubmit([suggestion]);
+    onSubmit(selectedSuggestions);
+    setSelectedSuggestions([]);
+  };
+
+  const handleFocus = () => {
+    if (searchTerm.length > 1) {
+      setShowSuggestions(true);
+    }
   };
 
   return (
@@ -84,23 +103,32 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
         value={searchTerm}
         onChange={handleChange}
         onKeyPress={handleKeyPress}
+        onFocus={handleFocus}
         className="bg-[#F8FAFC] outline-none flex-grow text-[#64748B] ml-[8px]"
       />
     </div>
     {showSuggestions && (
-      <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded-b-lg mt-1 text-[#64748B]">
-        {suggestions.map((item, index) => (
-          <li
-            key={index}
-            onClick={() => handleSuggestionClick(item)}
-            className="py-1 px-3 cursor-pointer hover:bg-gray-100"
-          >
-            {item}
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
+        <div className="absolute z-10 w-full bg-white border border-gray-200 rounded-b-lg mt-1 text-[#64748B]">
+          <div className="max-h-60 overflow-y-auto">
+            <ul>
+              {suggestions.map((item, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSuggestionClick(item)}
+                  className={`py-1 px-3 cursor-pointer flex items-center ${selectedSuggestions.includes(item) ? 'bg-gray-200' : 'hover:bg-gray-100'}`}
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <button onClick={handleConfirmSelection} className="py-1 px-3 cursor-pointer rounded-b-lg bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black w-full">
+            Confirm Selection
+          </button>
+        </div>
+      )}
+    </div>
+
   );
 };
 
