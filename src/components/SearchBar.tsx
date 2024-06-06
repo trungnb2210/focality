@@ -36,7 +36,7 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
       const itemsShown = 5;
       const formattedItems = items.map(item =>
         item.nativeName
-          ? item.nativeName + ' (' + item.name + ')'
+          ? item.nativeName
           : item.name
       ).slice(0, itemsShown);
       setSuggestions(formattedItems);
@@ -125,7 +125,8 @@ const parseIngredients = (input: string) => {
 };
 
 
-const queryDatabase = async (ingredient: string) => {
+export const queryDatabase = async (ingredient: string) => {
+  //need to try catch?
   const response = await fetch(`/api/ingredients?ingredient=${encodeURIComponent(ingredient)}`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
@@ -137,7 +138,6 @@ const findSimilarIngredients = async (ingredientArray: string[]) => {
   const result: string[] = []
   for (const ingredient of ingredientArray) {
     const matches = await queryDatabase(ingredient);
-    console.log(matches)
     if (matches.length > 1) {
         const titleCasedIngredient = toTitleCase(ingredient);
         result.push("Any " + titleCasedIngredient);
