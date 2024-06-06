@@ -20,7 +20,6 @@ model Item {
   storeId         String    // Foreign key
   store           Store     @relation(fields: [storeId], references: [sid], name: "StoreItems")
   @@index([price])
-  @@unique([storeId, name, nativeName])
 }
 
 model Store {
