@@ -2,8 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { storeId } = req.query;
-
+  const storeId = req.query.storeId as string; // Ensure storeId is treated as a string
   try {
     const items = await prisma.item.findMany({
       where: {
