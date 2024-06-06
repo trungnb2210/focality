@@ -25,8 +25,8 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
     const [expand, setExpand] = useState(false)
     const [queryRes, setQueryRes] = useState<string[]>([])
     const [ingredientName, setIngredientName] = useState<string>(ingredient)
-    const [options, setOptions] = useState<Option[]>([])
-    const [selected, setSelected] = useState([]);
+    // const [options, setOptions] = useState<Option[]>([])
+    // const [selected, setSelected] = useState([]);
 
 
     const ingQuery = ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
