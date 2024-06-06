@@ -35,12 +35,10 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
       for (const ingredient of ingredients) {
         const matches = await queryDatabase(ingredient);
         const matchesArray: Item[] = Array.isArray(matches) ? matches : [matches];
-        const itemsShown = 10;
         const formattedItems = matchesArray.map(item => 
           item.nativeName 
             ? item.nativeName
-            : item.name
-        ).slice(0, itemsShown);
+            : item.name)
         
         formattedItems.forEach(item => itemsSet.add(item));
       }
@@ -106,17 +104,19 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
     </div>
     {showSuggestions && (
         <div className="absolute z-10 w-full bg-white border border-gray-200 rounded-b-lg mt-1 text-[#64748B]">
-          <ul>
-            {suggestions.map((item, index) => (
-              <li
-                key={index}
-                onClick={() => handleSuggestionClick(item)}
-                className={`py-1 px-3 cursor-pointer flex items-center ${selectedSuggestions.includes(item) ? 'bg-gray-200' : 'hover:bg-gray-100'}`}
-              >
-                {item}
-              </li>
-            ))}
-          </ul>
+          <div className="max-h-60 overflow-y-auto">
+            <ul>
+              {suggestions.map((item, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSuggestionClick(item)}
+                  className={`py-1 px-3 cursor-pointer flex items-center ${selectedSuggestions.includes(item) ? 'bg-gray-200' : 'hover:bg-gray-100'}`}
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
           <button onClick={handleConfirmSelection} className="py-1 px-3 cursor-pointer rounded-b-lg bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black w-full">
             Confirm Selection
           </button>
