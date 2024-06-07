@@ -18,6 +18,8 @@ interface Store {
     sortcode: string;
     imageUrl: string;
     items: Item[];
+    email: string;
+    phoneNo: string;
 }
 
 interface ItemComponentProp {
@@ -45,7 +47,11 @@ const ItemComponent: React.FC<ItemComponentProp> = ({ store, ingredients, distan
                         <h3 className="text-white font-bold">{distance.toFixed(1)} km</h3>
                     </div>
                 </div>
-                <div className="bg-white px-4 py-2 flex flex-col sm:flex-row">
+                <div className="bg-white px-4 py-2 flex flex-col">
+                    <div>
+                        <div>Email: {store.email}</div>
+                        <div>Phone Number: {store.phoneNo}</div>
+                    </div>
                     <div className="flex-grow pr-4 mb-4 sm:mb-0 sm:border-r border-gray-300 lg:border-r-0">
                         <h4 className="font-semibold text-[#1C941F]">Ingredients Available:</h4>
                         <ul className="list-disc list-inside space-y-1">

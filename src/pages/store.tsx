@@ -29,6 +29,8 @@ interface Store {
     sortcode: string;
     imageUrl: string;
     items: Item[];
+    email: string
+    phoneNo: string;
     availableItems: string[];
     unavailableItems: string[];
     distance: number;
