@@ -24,28 +24,14 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
    };
 
     const changeIngredientList = (newName: string, index:number) => {
-        // console.log(containsAny)
-        // console.log(newName)
         setIngredientList((oldList) => {
             let newList = [...oldList]
-            // newList[index] = newName
-            // if (newName.length === 0) {
-            //     newList[index] = [originalItem]
-            // }
             let curOption = newList[index]
             
-            console.log(curOption)
             
             if (newName !== originalList[index] && !curOption.includes(newName)) {
-                console.log("HERE")
-                // console.log(originalItem)
                 curOption = curOption.filter(x=> x!==originalList[index])
-
-                console.log("1", curOption)
-
                 curOption = curOption.concat(newName)
-                console.log("2", curOption)
-
 
             } else {
                 curOption = curOption.includes(newName) ? curOption.filter(x => x !== newName) : curOption.concat([newName])
@@ -53,19 +39,11 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
             }
 
 
-            // if (!containsAny) {
-            //     curOption = curOption.filter(x=>x!=originalItem)
-            // }
-            // console.log(curOption)
-
             if (curOption.length === 0) {
                 curOption = [originalList[index]]
             }
 
-            console.log(curOption)
-
             newList[index] = curOption
-            // newList[index] = newName
 
             return newList
 
