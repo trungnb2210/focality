@@ -20,6 +20,8 @@ export interface Store {
   name: string | null;
   sortcode: string;
   imageUrl: string;
+  email: string;
+  phoneNo: string;
   items: Item[];
 }
 
