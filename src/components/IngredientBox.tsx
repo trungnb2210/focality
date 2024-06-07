@@ -1,8 +1,6 @@
 import { IoClose } from "react-icons/io5"
 import React, { useState, useEffect } from 'react'
 import { queryDatabase } from '@/components/SearchBar';
-// import { MultiSelect, Option } from "react-multi-select-component";
-
 
 
 type ItemProp = {
@@ -22,7 +20,9 @@ type IngredientProp = {
 // const 
 
 const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, removeMethod, changeMethod}) => {
-    const originalItem = JSON.parse(JSON.stringify(ingredient));
+
+    // const originalItem = JSON.parse(JSON.stringify(ingredient));
+
 
     const [expand, setExpand] = useState(false)
     const [queryRes, setQueryRes] = useState<string[]>([])
@@ -60,22 +60,30 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
     const handleChange = (qr: string, i: number) => {
         // console.log(qr)
 
+
         if (qr.startsWith("Any ")) {
+            // if (selectedOptions.includes(originalItem)) {
+            //     setSelectedOptions([])
+            // }
             if (selectedOptions === queryRes) {
                 setSelectedOptions([])
+                // containsAny = false
             } else {
                 setSelectedOptions(queryRes)
                 setIngredientName(qr)
+                // containsAny = true
             }
             
 
         } else {
             setSelectedOptions((oldList) => {
                 let newList = [...oldList]
+                // console.log(newList)
                 if (newList.includes(qr)) {
                     newList = newList.filter(x => x !== qr)
                     if (newList.length == 0) {
-                        newList = originalItem
+                        // console.log("ORIGINAL ITEM", originalItem)
+                        newList = [queryRes[0]] // need to get the ANY
                     }
                 } else {
                     newList = [...newList, qr]
@@ -87,14 +95,16 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
                 return newList
             });
         }
+
+
+        // console.log("ORIGINAL ITEM", originalItem)
         
+        // const containsAny = selectedOptions.includes(originalItem) || selectedOptions.length === 0 
+        // console.log(selectedOptions.includes(originalItem), selectedOptions.length === 0 )
         changeMethod(qr, i)
 
 
         // console.log(selectedOptions)
-
-        // console.log(selectedOptions)
-        
         // setIngredientName(qr)
         // setIngredientName((old) => selectedOptions.toString())
 

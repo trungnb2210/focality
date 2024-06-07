@@ -15,7 +15,8 @@ interface IngredientsPageProps {
 }
 
 const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
-   const [ingredientList, setIngredientList] = useState(ingredients);
+   const originalList = [...ingredients]
+   const [ingredientList, setIngredientList] = useState(ingredients.map(i=>[i]));
    //TODO: Change ingredientList into set
 
    const removeIngredient = (index: number) => {
@@ -23,23 +24,61 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
    };
 
     const changeIngredientList = (newName: string, index:number) => {
-
+        // console.log(containsAny)
+        // console.log(newName)
         setIngredientList((oldList) => {
             let newList = [...oldList]
-            newList[index] = newName
+            // newList[index] = newName
+            // if (newName.length === 0) {
+            //     newList[index] = [originalItem]
+            // }
+            let curOption = newList[index]
+            
+            console.log(curOption)
+            
+            if (newName !== originalList[index] && !curOption.includes(newName)) {
+                console.log("HERE")
+                // console.log(originalItem)
+                curOption = curOption.filter(x=> x!==originalList[index])
+
+                console.log("1", curOption)
+
+                curOption = curOption.concat(newName)
+                console.log("2", curOption)
+
+
+            } else {
+                curOption = curOption.includes(newName) ? curOption.filter(x => x !== newName) : curOption.concat([newName])
+
+            }
+
+
+            // if (!containsAny) {
+            //     curOption = curOption.filter(x=>x!=originalItem)
+            // }
+            // console.log(curOption)
+
+            if (curOption.length === 0) {
+                curOption = [originalList[index]]
+            }
+
+            console.log(curOption)
+
+            newList[index] = curOption
+            // newList[index] = newName
+
             return newList
+
         })
     }
 
-   const preprocessIngredients = (ingredientList: string[]) => {
-    // let newList = [...ingredientList].map(ingredient =>
-    //         ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
-    //     );
-
-    setIngredientList((oldList) => oldList.map(ingredient =>
-        ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
-    ));
-   };
+    const preprocessIngredients = (ingredientList: string[]) => {
+        let newList = [...ingredientList].map(ingredient =>
+                ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
+            );
+    
+        return newList;
+       };
 
    const findStoreButton = ingredientList.length === 0;
    const disableColor = "bg-[#E3E5E5] text-[#979C9E]";
@@ -54,7 +93,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
                 <div className="py-[6px] w-full flex justify-center">
                    <div className="flex flex-col items-center space-y-4">
                        {ingredientList.map((ingredient, index) => (
-                            <DownDownIngredient ingredient={ingredient} index={index} removeMethod={removeIngredient} changeMethod={changeIngredientList} key={index} />
+                            <DownDownIngredient ingredient={ingredient[0]} index={index} removeMethod={removeIngredient} changeMethod={changeIngredientList} key={index} />
                        ))}
                    </div>
                </div>
@@ -64,7 +103,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
                 <Link
                     href={{
                         pathname: "search",
-                        query: { ingredients: ingredientList }
+                        query: { ingredients: ingredientList.flat() }
                     }}
                     className="p-2 rounded-[67px] bg-red-600
                     text-white items-center flex justify-center hover:bg-red-300 hover:text-white
@@ -76,7 +115,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
                     <Link
                         href={{
                             pathname: "store",
-                            query: { ingredients: ingredientList }
+                            query: { ingredients: preprocessIngredients(ingredientList.flat()) }
                         }}
                         className={`py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold
                         drop-shadow-2xl`}
