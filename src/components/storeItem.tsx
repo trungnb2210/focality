@@ -55,8 +55,14 @@ const ItemComponent: React.FC<ItemComponentProp> = ({ store, ingredients, distan
                                     (item.nativeName && item.nativeName.toLowerCase().includes(ingredient.toLowerCase()))
                                 )
                             ).map(item => (
-                                <li key={item.iid} className="text-gray-700">
+                                <li key={item.iid} className="text-gray-700 flex items-center">
                                     {item.name} {item.nativeName ? `(${item.nativeName})` : ''} - £{item.price.toFixed(2)}
+                                    {item.imageUrl && 
+                                    <img 
+                                        src={item.imageUrl} 
+                                        alt={`Image of ${item.nativeName ? item.nativeName : item.name}`} 
+                                        className="w-10 h-10 ml-5"
+                                    />}
                                 </li>
                             ))}
                         </ul>
