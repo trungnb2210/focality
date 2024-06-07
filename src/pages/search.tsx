@@ -14,14 +14,17 @@ const SearchIngredientPage: React.FC = () => {
   const initialFrequent = ['Prahok', 'Nam Pla', 'Basmati Rice'];
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [frequent, setFrequent] = useState<string[]>([]);
+//   setFrequent(initialFrequent);
 
   useEffect(() => {
     const { query } = router;
     if (query.ingredients) {
-      const ingredients = Array.isArray(query.ingredients) ? query.ingredients : [query.ingredients];
-      setSelectedIngredients(ingredients);
-      const newFreq = initialFrequent.filter(i => !ingredients.includes(i))
-      setFrequent(newFreq)
+        const ingredients = Array.isArray(query.ingredients) ? query.ingredients : [query.ingredients];
+        setSelectedIngredients(ingredients);
+        const newFreq = initialFrequent.filter(i => !ingredients.includes(i))
+        setFrequent(newFreq)
+    } else {
+        setFrequent(initialFrequent)
     }
   }, [router.query]);
 
@@ -75,9 +78,7 @@ const SearchIngredientPage: React.FC = () => {
             {frequent.map((ingredient, index) => (
               <div
                 key={ingredient}
-                onClick={() => {
-                    console.log("the ingredient is", ingredient)
-                    addIngredient(ingredient)}}
+                onClick={() => {addIngredient(ingredient)}}
                 className="w-full flex items-center p-3 rounded-lg cursor-pointer bg-[#B8D8D8] text-black drop-shadow-md"
               >
                 <span>{ingredient}</span>
@@ -104,18 +105,6 @@ const SearchIngredientPage: React.FC = () => {
               {selectedIngredients.map((ingredient, index) => (
                 <DownDownIngredient ingredient={ingredient} index={index}
                 removeMethod={removeIngredient} changeMethod={changeIngredientList} key={index} />
-                // <div
-                //   key={index}
-                //   className="relative w-[343px] h-[54px] rounded-lg overflow-hidden drop-shadow-2xl"
-                // >
-                //   <button
-                //     className="absolute inset-0 z-10 flex justify-between items-center w-full h-full bg-[#4F6367] text-white transition duration-300 ease-in-out"
-                //     onClick={() => removeIngredient(index)}
-                //   >
-                //     <span className="ml-5">{ingredient}</span>
-                //     <IoClose size={24} className='mr-2'/>
-                //   </button>
-                // </div>
               ))}
             </div>
           </>
