@@ -27,5 +27,7 @@ model Store {
   name      String?                               @unique
   sortcode  String
   imageUrl  String                                @default("https://gedhuiyjqbzrvz6n.public.blob.vercel-storage.com/stores/store-default-PXU3X9q8BWm7ErgGU9psHLWy8naGws.jpg")
+  email     String?
+  phoneNo   String?
   items     Item[]                                @relation(name: "StoreItems")
 }

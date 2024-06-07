@@ -201,9 +201,62 @@ export default function StoreSide() {
 
   return (
     <div className="max-w-md mx-auto bg-white p-8 rounded-md shadow-md">
+      <div className="mb-4">
+        <label htmlFor="storeId" className="block text-sm font-medium text-gray-700">Select Store:</label>
+        <select
+          id="storeId"
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+          value={storeId}
+          onChange={(e) => {
+            setStoreId(e.target.value);
+            fetchStoreItems(e.target.value);
+          }}
+          required
+        >
+          <option value="" disabled>Select a store</option>
+          {stores.map((store) => (
+            <option key={store.sid} value={store.sid}>
+              {store.name}
+            </option>
+          ))}
+        </select>
+      </div>
+  
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Store Items</h2>
+        {storeItems.length > 0 ? (
+          <table className="min-w-full bg-white">
+            <thead>
+              <tr>
+                <th className="py-2">Image</th>
+                <th className="py-2">Name</th>
+                <th className="py-2">Native Name</th>
+                <th className="py-2">Price</th>
+                <th className="py-2">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {storeItems.map((item) => (
+                <tr key={item.iid}>
+                  <td className="py-2">
+                    <img src={item.imageUrl} alt={item.name} className="h-16 w-16 object-cover" />
+                  </td>
+                  <td className="py-2">{item.name}</td>
+                  <td className="py-2">{item.nativeName}</td>
+                  <td className="py-2">£{item.price}</td>
+                  <td className="py-2">{item.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No items found for the selected store.</p>
+        )}
+      </div>
+  
       <h1 className="text-2xl font-bold mb-6">Add New Item</h1>
       <form onSubmit={handleSubmit}>
-{error && <p className="text-red-500 mb-4">{error}</p>}
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         {success && <p className="text-green-500 mb-4">{success}</p>}
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name:</label>
@@ -255,23 +308,6 @@ export default function StoreSide() {
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-        <div className="mb-4">
-          <label htmlFor="storeId" className="block text-sm font-medium text-gray-700">Store:</label>
-          <select
-            id="storeId"
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={storeId}
-            onChange={(e) => setStoreId(e.target.value)}
-            required
-          >
-            <option value="" disabled>Select a store</option>
-            {stores.map((store) => (
-              <option key={store.sid} value={store.sid}>
-                {store.name}
-              </option>
-            ))}
-          </select>
-        </div>
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
@@ -279,26 +315,10 @@ export default function StoreSide() {
           Add Item
         </button>
       </form>
+  
       <div className="mt-8">
         <h2 className="text-2xl font-bold mb-4">Upload Items (.csv)</h2>
         <form onSubmit={handleItemSubmit}>
-          <div className="mb-4">
-            <label htmlFor="storeId" className="block text-sm font-medium text-gray-700">Store:</label>
-            <select
-              id="storeId"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              value={storeId}
-              onChange={(e) => setStoreId(e.target.value)}
-              required
-            >
-              <option value="" disabled>Select a store</option>
-              {stores.map((store) => (
-                <option key={store.sid} value={store.sid}>
-                  {store.name}
-                </option>
-              ))}
-            </select>
-          </div>
           <div className="mb-4">
             <label htmlFor="itemsCsv" className="block text-sm font-medium text-gray-700">Items CSV:</label>
             <input
@@ -318,60 +338,39 @@ export default function StoreSide() {
           </button>
         </form>
       </div>
-    
+  
       <div className="mt-8">
-      <h2 className="text-2xl font-bold mb-4">Delete Item</h2>
-      <div className="mb-4">
-        <label htmlFor="storeId" className="block text-sm font-medium text-gray-700">Select Store:</label>
-        <select
-          id="storeId"
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          value={storeId}
-          onChange={(e) => {
-            setStoreId(e.target.value);
-            fetchStoreItems(e.target.value);
-          }}
-          required
-        >
-          <option value="" disabled>Select a store</option>
-          {stores.map((store) => (
-            <option key={store.sid} value={store.sid}>
-              {store.name}
-            </option>
-          ))}
-        </select>
+        <h2 className="text-2xl font-bold mb-4">Delete Item</h2>
+        {storeItems.length > 0 && (
+          <div>
+            <label htmlFor="items" className="block text-sm font-medium text-gray-700">Select Item to Delete:</label>
+            <select
+              id="items"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              onChange={(e) => setSelectedItemId(e.target.value)}
+              value={selectedItemId}
+            >
+              <option value="" disabled>Select an item</option>
+              {storeItems.map((item) => (
+                <option key={item.iid} value={item.iid}>
+                  {item.name}
+                  {item.nativeName && ` - ${item.nativeName}`}
+                </option>
+              ))}
+            </select>
+            <button
+              className="mt-4 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300"
+              onClick={() => {
+                if (selectedItemId && window.confirm('Are you sure you want to delete this item?')) {
+                  handleDeleteItem(selectedItemId);
+                }
+              }}
+            >
+              Delete Item
+            </button>
+          </div>
+        )}
       </div>
-      {storeItems.length > 0 && (
-        <div>
-          <label htmlFor="items" className="block text-sm font-medium text-gray-700">Select Item to Delete:</label>
-          <select
-            id="items"
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            onChange={(e) => setSelectedItemId(e.target.value)}
-            value={selectedItemId}
-          >
-            <option value="" disabled>Select an item</option>
-            {storeItems.map((item) => (
-              <option key={item.iid} value={item.iid}>
-                {item.name}
-                {item.nativeName && ` - ${item.nativeName}`}
-              </option>
-            ))}
-          </select>
-          <button
-            className="mt-4 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300"
-            onClick={() => {
-              if (selectedItemId && window.confirm('Are you sure you want to delete this item?')) { // Check if selectedItemId is defined
-                handleDeleteItem(selectedItemId);
-              }
-            }}
-          >
-            Delete Item
-          </button>
-        </div>
-      )}
     </div>
-  </div>
-
   );
 }
