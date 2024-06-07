@@ -27,8 +27,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
         setIngredientList((oldList) => {
             let newList = [...oldList]
             let curOption = newList[index]
-            
-            
+
             if (newName !== originalList[index] && !curOption.includes(newName)) {
                 curOption = curOption.filter(x=> x!==originalList[index])
                 curOption = curOption.concat(newName)

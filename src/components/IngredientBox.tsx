@@ -1,6 +1,7 @@
 import { IoClose } from "react-icons/io5"
 import React, { useState, useEffect } from 'react'
 import { queryDatabase } from '@/components/SearchBar';
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 
 type ItemProp = {
@@ -26,9 +27,10 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
 
     const [expand, setExpand] = useState(false)
     const [queryRes, setQueryRes] = useState<string[]>([])
-    const [ingredientName, setIngredientName] = useState<string>(ingredient)
+    const [ingredientName, setIngredientName] = useState<string>('')
 
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+    const [expandable, setExpandAble] = useState<boolean>()
 
     // const [options, setOptions] = useState<Option[]>([])
     // const [selected, setSelected] = useState([]);
@@ -36,6 +38,14 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
 
     const ingQuery = ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
 
+    useEffect(() => {
+        setExpandAble(ingredient.includes("Any "))
+        if (selectedOptions.length == 0)    {
+            setIngredientName(ingredient)
+        } else {
+            setIngredientName((old) => selectedOptions.toString().length < 34 ? selectedOptions.toString() : selectedOptions.toString().slice(0, 33).concat("..."))
+        }
+    })
 
     // May need to change to get all choices instead of just ones in database
     
@@ -52,8 +62,6 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
         // queryRes.forEach(function(element) {
         //     options.push({ label:element, value: element })
         // });
-
-
 
     };
 
@@ -73,7 +81,7 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
                 setIngredientName(qr)
                 // containsAny = true
             }
-            
+
 
         } else {
             setSelectedOptions((oldList) => {
@@ -125,21 +133,23 @@ const DownDownIngredient: React.FC<IngredientProp> = ({ ingredient, index, remov
         // className="relative w-[343px] h-[54px] rounded-lg overflow-hidden drop-shadow-2xl"
         >
             <div
-                className="relative w-[343px] h-[54px] rounded-lg overflow-hidden flex justify-between items-center bg-[#4F6367] text-white transition duration-300 ease-in-out"
+                className="relative h-[54px] overflow-hidden flex justify-between
+                 items-centertransition duration-300 ease-in-out flex-row"
             >
                 <button
                     onClick={handleExpand}
-                    className="w-[90%] h-full text-left border-white"
-                // className="relative w-[343px] h-[54px] rounded-lg overflow-hidden flex justify-between items-center bg-[#4F6367] text-white transition duration-300 ease-in-out"
-
-                // className="absolute inset-0 z-10 flex justify-between items-center w-full h-full bg-[#4F6367] text-white  transition duration-300 ease-in-out"
-                // onClick={() => removeIngredient(index)}
+                    className="rounded-lg text-left border-white w-[343px] bg-[#4F6367] 
+                    text-white flex flex-row items-center justify-between pr-2"
+                    disabled={!expandable}
                 >
                     <span className="ml-5">{ingredientName}</span>
-
+                    {expandable? (expand? <FaAngleDown/> : <FaAngleUp/>): <></> }
                 </button>
-                <IoClose size={24} className='mr-2 h-full' onClick={() => removeMethod(index)} />
 
+                <button className="h-[54px] flex items-center rounded-lg bg-[#E23E3E] px-2 ml-2"
+                onClick={() => removeMethod(index)} >
+                    <div className="text-white font-semibold">Delete</div>
+                </button>
             </div>
 
 

@@ -36,7 +36,7 @@ export const SearchBar: React.FC<searchBarProp> = ({ placeholder, initialIngredi
         const matches = await queryDatabase(ingredient);
         const matchesArray: Item[] = Array.isArray(matches) ? matches : [matches];
         const formattedItems = matchesArray.map(item => 
-          item.nativeName 
+          item.nativeName
             ? item.nativeName
             : item.name)
         
