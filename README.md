@@ -2,7 +2,7 @@
 
 Note:
 Everytime schema.prisma is updated run "npx prisma generate"
-Then push to the server with "npx primsa db push"
+Then push to the server with "npx prisma db push"
 Modify table by "npx prisma studio"
 
 

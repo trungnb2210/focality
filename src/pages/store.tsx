@@ -12,7 +12,7 @@ import Router, { useRouter } from 'next/router';
 
 const libraries: Loader["libraries"] = ["places"];
 
-interface Item {
+export interface Item {
     iid: string;
     name: string;
     nativeName: string;
@@ -23,14 +23,14 @@ interface Item {
     store: Store;
 }
 
-interface Store {
+export interface Store {
     sid: string;
     name: string | null;
     sortcode: string;
     imageUrl: string;
     items: Item[];
-    email: string
-    phoneNo: string;
+    email: string | null;
+    phoneNo: string | null;
     availableItems: string[];
     unavailableItems: string[];
     distance: number;
@@ -68,7 +68,7 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
     const fetchStores = async (location: string) => {
         const ingredientsParam = encodeURIComponent(JSON.stringify(ingredients));
         const locationParam = encodeURIComponent(location);
-        const response = await fetch(`/api/store?ingredients=${ingredientsParam}&currentLocation=${locationParam}`);
+        const response = await fetch(`/api/distance?ingredients=${ingredientsParam}&currentLocation=${locationParam}`);
         const data = await response.json();
         setStores(data.stores);
         setCurrentLocation(location);

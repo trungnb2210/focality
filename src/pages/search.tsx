@@ -102,9 +102,23 @@ const SearchIngredientPage: React.FC = () => {
                 </div>
             </div>
             <div className="flex flex-col items-center space-y-4 py-6 mb-10">
-              {selectedIngredients.map((ingredient, index) => (
-                <DownDownIngredient ingredient={ingredient} index={index}
-                removeMethod={removeIngredient} changeMethod={changeIngredientList} key={index} />
+            {selectedIngredients.map((ingredient, index) => (
+                <div
+                  key={index}
+                  className=" h-[54px] overflow-hidden drop-shadow-2xl"
+                >
+                    <div
+                        className="inset-0 z-10 flex justify-between items-center text-white transition duration-300 ease-in-out"
+                        // onClick={() => removeIngredient(index)}
+                    >
+                        <span className="ml-5 w-[343px] h-[54px] bg-[#4F6367] flex justify-center items-center rounded-lg ">{ingredient}</span>
+                        {/* <IoClose size={24} className='mr-2'/> */}
+                    <button className="h-[54px] flex items-center rounded-lg bg-[#E23E3E] px-2 ml-2"
+                        onClick={() => removeIngredient(index)} >
+                            <div className="text-white font-semibold">Delete</div>
+                    </button>
+                    </div>
+                </div>
               ))}
             </div>
           </>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { IoLocationSharp } from "react-icons/io5";
+import { Store } from "../pages/store";
 
 interface Item {
     iid: string;
@@ -10,16 +11,6 @@ interface Item {
     description: string;
     storeId: string;
     store: Store;
-}
-
-interface Store {
-    sid: string;
-    name: string | null;
-    sortcode: string;
-    imageUrl: string;
-    items: Item[];
-    email: string;
-    phoneNo: string;
 }
 
 interface ItemComponentProp {
