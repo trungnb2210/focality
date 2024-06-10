@@ -2,9 +2,9 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Autocomplete } from '@react-google-maps/api';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const LocationInput: React.FC<{ onLocationSelect: (location: string) => void }> = ({ onLocationSelect }) => {
-    const [address, setAddress] = useState<string>("");
-    const [error, setError] = useState<string | null>("Enter Address");
+const LocationInput: React.FC<{ onLocationSelect: (location: string) => void; initialAddress: string }> = ({ onLocationSelect, initialAddress }) => {
+    const [address, setAddress] = useState<string>(initialAddress);
+    const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
@@ -44,8 +44,10 @@ const LocationInput: React.FC<{ onLocationSelect: (location: string) => void }> 
     };
 
     useEffect(() => {
-        fetchCurrentLocation();
-    }, []);
+        if (!initialAddress) {
+            fetchCurrentLocation();
+        }
+    }, [initialAddress]);
 
     const handlePlaceChanged = () => {
         if (autocompleteRef.current) {

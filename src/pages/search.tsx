@@ -12,27 +12,31 @@ const SearchIngredientPage: React.FC = () => {
   const initialFrequent = ['Prahok', 'Nam Pla', 'Basmati Rice'];
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [frequent, setFrequent] = useState<string[]>([]);
-//   setFrequent(initialFrequent);
+  const [address, setAddress] = useState<string>();
 
   useEffect(() => {
     const { query } = router;
     if (query.ingredients) {
-        const ingredients = Array.isArray(query.ingredients) ? query.ingredients : [query.ingredients];
-        setSelectedIngredients(ingredients);
-        const newFreq = initialFrequent.filter(i => !ingredients.includes(i))
-        setFrequent(newFreq)
+      const ingredients = Array.isArray(query.ingredients) ? query.ingredients : [query.ingredients];
+      setSelectedIngredients(ingredients);
+      const newFreq = initialFrequent.filter(i => !ingredients.includes(i));
+      setFrequent(newFreq);
+      if (query.address) {
+        const addr = query.address as string;
+        setAddress(addr);
+      }
     } else {
-        setFrequent(initialFrequent)
+      setFrequent(initialFrequent);
     }
   }, [router.query]);
 
   const preprocessIngredients = (ingredientList: string[]) => {
     let newList = [...ingredientList].map(ingredient =>
-            ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
-        );
+      ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
+    );
 
     return newList;
-   };
+  };
 
   const removeIngredient = (index: number) => {
     const ingredient = selectedIngredients[index];
@@ -50,12 +54,12 @@ const SearchIngredientPage: React.FC = () => {
   };
 
   const changeIngredientList = (newName: string, index:number) => {
-        setSelectedIngredients((oldList) => {
-            let newList = [...oldList]
-            newList[index] = newName
-            return newList
-        })
-    }
+    setSelectedIngredients((oldList) => {
+      let newList = [...oldList];
+      newList[index] = newName;
+      return newList;
+    });
+  };
 
   const handleSearchSubmit = (searchResults: string[]) => {
     searchResults.forEach(addIngredient);
@@ -89,33 +93,31 @@ const SearchIngredientPage: React.FC = () => {
             <div className="flex justify-center w-full items-center font-bold pt-5">
               Cart
               <div
-                className="relative mr-2 px-2 text-[#3E3F3B] font-bold  flex items-center justify-center"
-                >
+                className="relative mr-2 px-2 text-[#3E3F3B] font-bold flex items-center justify-center"
+              >
                 <FaShoppingCart/>
                 {selectedIngredients.length > 0 && (
-                    <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-sm bg-red-600 text-white rounded-full px-2">
+                  <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-sm bg-red-600 text-white rounded-full px-2">
                     {selectedIngredients.length}
-                    </span>
+                  </span>
                 )}
-                </div>
+              </div>
             </div>
             <div className="flex flex-col items-center space-y-4 py-6 mb-10">
-            {selectedIngredients.map((ingredient, index) => (
+              {selectedIngredients.map((ingredient, index) => (
                 <div
                   key={index}
-                  className=" h-[54px] overflow-hidden drop-shadow-2xl"
+                  className="h-[54px] overflow-hidden drop-shadow-2xl"
                 >
-                    <div
-                        className="inset-0 z-10 flex justify-between items-center text-white transition duration-300 ease-in-out"
-                        // onClick={() => removeIngredient(index)}
-                    >
-                        <span className="ml-5 w-[343px] h-[54px] bg-[#4F6367] flex justify-center items-center rounded-lg ">{ingredient}</span>
-                        {/* <IoClose size={24} className='mr-2'/> */}
+                  <div
+                    className="inset-0 z-10 flex justify-between items-center text-white transition duration-300 ease-in-out"
+                  >
+                    <span className="ml-5 w-[343px] h-[54px] bg-[#4F6367] flex justify-center items-center rounded-lg">{ingredient}</span>
                     <button className="h-[54px] flex items-center rounded-lg bg-[#E23E3E] px-2 ml-2"
-                        onClick={() => removeIngredient(index)} >
-                            <div className="text-white font-semibold">Delete</div>
+                      onClick={() => removeIngredient(index)} >
+                      <div className="text-white font-semibold">Delete</div>
                     </button>
-                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -123,8 +125,21 @@ const SearchIngredientPage: React.FC = () => {
         )}
       </main>
       <footer className="w-full flex justify-center items-center fixed bottom-0 left-0 right-0 bg-white drop-shadow-4xl backdrop-filter backdrop-blur-lg bg-opacity-40 py-2">
-        <button onClick={() => router.push({ pathname: "/store", query: { ingredients: preprocessIngredients(selectedIngredients) } })} 
-        className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold">Find Store</button>
+        <button onClick={() => 
+            router.push({ 
+                pathname: "/store",
+                query: { 
+                    ingredients: preprocessIngredients(selectedIngredients),
+                    address: address ? address : ""
+                } })}
+          className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold mx-2">Find Store</button>
+        <button onClick={() => 
+            router.push({ 
+                pathname: "/recipe",
+                query: { 
+                    ingredients: preprocessIngredients(selectedIngredients)
+                } })}
+          className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold mx-2">Find Recipes</button>
       </footer>
     </div>
   );

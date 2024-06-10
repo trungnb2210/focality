@@ -1,15 +1,11 @@
 "use client"
 
-import React, { useContext, useReducer, useState } from "react";
-import IngredientsPage from "@/pages/ingredients";
-import LocationPage from "@/pages/location";
+import React from "react";
 import Link from "next/link";
-import RecipeList from "@/pages/recipe";
 
 export default async function Home() {
   return (
     <main className="">
-        {/* <RecipeList userName={"Kevin Nguyen"}></RecipeList> */}
         <Link href={{
             pathname: "recipe",
             query: {

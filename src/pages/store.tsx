@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useLoadScript, Autocomplete } from '@react-google-maps/api';
 import { Loader } from '@googlemaps/js-api-loader';
 import { GetServerSideProps } from 'next';
@@ -7,8 +7,9 @@ import NavBar from '@/components/NavBar';
 import ItemComponent from '@/components/storeItem';
 import LocationInput from '@/components/LocationInput';
 import Link from 'next/link';
-import { FaPlus, FaShoppingCart } from 'react-icons/fa';
-import Router, { useRouter } from 'next/router';
+import { FaShoppingCart } from 'react-icons/fa';
+import { useRouter } from 'next/router';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const libraries: Loader["libraries"] = ["places"];
 
@@ -40,21 +41,24 @@ export interface Store {
 interface ListOfStorePageProps {
     initialStores: Store[];
     ingredients: string[];
+    searchAddress: string | null;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const { ingredients } = context.query;
+    const { ingredients, address } = context.query;
     const ingredientsArray = ingredients ? (Array.isArray(ingredients) ? ingredients : [ingredients]) : [];
+    const searchAddress = address ? address : null;
 
     return {
         props: {
             initialStores: [],
             ingredients: ingredientsArray,
+            searchAddress: searchAddress
         },
     };
 }
 
-const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingredients }) => {
+const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingredients, searchAddress }) => {
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: "AIzaSyAZQITL5AWcrnNWaeh_zQpllcI-5fPGmC4",
         libraries,
@@ -63,7 +67,7 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
     const router = useRouter();
 
     const [stores, setStores] = useState<Store[]>(initialStores);
-    const [currentLocation, setCurrentLocation] = useState<string>("");
+    const [currentLocation, setCurrentLocation] = useState<string>(searchAddress || "");
 
     const fetchStores = async (location: string) => {
         const ingredientsParam = encodeURIComponent(JSON.stringify(ingredients));
@@ -73,7 +77,6 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
         setStores(data.stores);
         setCurrentLocation(location);
     };
-    
 
     const handleLocationSelect = (location: string) => {
         fetchStores(location);
@@ -88,16 +91,29 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
         return b.matchedIngredients - a.matchedIngredients;
     });
 
-    if (!isLoaded) return <div>Loading...</div>;
+    useEffect(() => {
+        if (searchAddress) {
+            fetchStores(searchAddress);
+        }
+    }, [searchAddress]);
+
+    if (!isLoaded) return <CircularProgress/>;
 
     return (
         <div className="flex flex-col h-screen">
             <NavBar brandName='Stores List' />
             <div className="p-4 drop-shadow-sm lg:flex lg:justify-between">
                 <div className="flex">
-                    <LocationInput onLocationSelect={handleLocationSelect} />
+                    <LocationInput onLocationSelect={handleLocationSelect} initialAddress={currentLocation} />
                     <button
-                    onClick={() => router.push({ pathname: "/ingredients", query: { ingredients: ingredients } })}
+                    onClick={() => 
+                        router.push({ 
+                            pathname: "/search", 
+                            query: { 
+                                ingredients: ingredients, 
+                                address: currentLocation 
+                            } 
+                        })}
                     className="w-min h-min relative py-2 px-4 ml-2 rounded-full bg-[#EEF5DB] text-[#3E3F3B]
                     hover:bg-[#3E3F3B] hover:text-[#EEF5DB] font-bold border-2 border-[#3E3F3B]
                     flex items-center justify-center mt-2"
@@ -122,13 +138,6 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
                 </div>
             </div>
             <main className="flex-grow flex flex-col justify-start px-4 py-6 mb-12">
-                {/* {currentLocation && (
-                    <div className="mb-4 text-left font-medium w-2/3">
-                        <p className="content-fit p-2 inline rounded-2xl drop-shadow-sm">
-                            {currentLocation}
-                        </p>
-                    </div>
-                )} */}
                 <div className="w-full flex flex-col items-center space-y-4">
                     {sortedStores.map((store) => (
                         <ItemComponent key={store.sid} store={store} ingredients={ingredients} distance={store.distance} />
@@ -144,14 +153,16 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
                 <Link
                     href={{
                         pathname: "search",
-                        query: { ingredients: ingredients }
+                        query: { 
+                            ingredients: ingredients, 
+                            address: currentLocation 
+                        } 
                     }}
                     className="p-2 px-4 rounded-[67px] bg-red-600
                     text-white items-center flex justify-center hover:bg-red-300 hover:text-white
                     drop-shadow-2xl"
                 >
                     <div className="font-semibold">More Ingredient</div>
-                    {/* <FaPlus size={20} /> */}
                 </Link>
            </footer>
         </div>
