@@ -19,7 +19,6 @@ model Item {
   description String? 
   storeId     String    // Foreign key
   store       Store     @relation(fields: [storeId], references: [sid], name: "StoreItems")
-  recipes     Recipe[]  @relation(name: "RecipeItems")
   @@index([price])
 }
 
@@ -48,7 +47,7 @@ model Recipe {
   description       String?
   timeToCook        Int?
   imageUrl          String?
-  items             Item[]         @relation(name: "RecipeItems")
+  items             String[]       
   favouritedByUsers User[]         @relation(name: "UserFavouriteRecipes")
 }
 
