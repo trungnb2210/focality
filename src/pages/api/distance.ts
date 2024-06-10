@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
+import { Store } from '../store'
 
 const calculateDistance = async (address1: string, address2: string): Promise<number> => {
     const api_key: string = process.env.GOOGLE_MAP_API_KEY? process.env.GOOGLE_MAP_API_KEY: "";
@@ -53,7 +54,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     OR: ingredientsArray.map(ingredient => ({
                         OR: [
                             { nativeName: { contains: ingredient, mode: 'insensitive' } },
-                            { name: { contains: ingredient, mode: 'insensitive' } }
+                            { name: { contains: ingredient, mode: 'insensitive' } },
                         ]
                     }))
                 },
