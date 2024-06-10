@@ -11,23 +11,50 @@ datasource db {
 }
 
 model Item {
-  iid             String    @default(cuid()) @id
-  name            String    
-  nativeName      String?
-  price           Float     @default(0.0)
-  imageUrl        String    @default("https://gedhuiyjqbzrvz6n.public.blob.vercel-storage.com/ingredients/item_default-ZTc4HHFitsmUuquJz898puf6XoHrTh.jpg")
-  description     String? 
-  storeId         String    // Foreign key
-  store           Store     @relation(fields: [storeId], references: [sid], name: "StoreItems")
+  iid         String    @default(cuid()) @id
+  name        String    
+  nativeName  String?
+  price       Float     @default(0.0)
+  imageUrl    String    @default("https://gedhuiyjqbzrvz6n.public.blob.vercel-storage.com/ingredients/item_default-ZTc4HHFitsmUuquJz898puf6XoHrTh.jpg")
+  description String? 
+  storeId     String    // Foreign key
+  store       Store     @relation(fields: [storeId], references: [sid], name: "StoreItems")
+  recipes     Recipe[]  @relation(name: "RecipeItems")
   @@index([price])
 }
 
 model Store {
-  sid       String                                @default(cuid()) @id
-  name      String?                               @unique
+  sid       String      @default(cuid()) @id
+  name      String?     @unique
   sortcode  String
-  imageUrl  String                                @default("https://gedhuiyjqbzrvz6n.public.blob.vercel-storage.com/stores/store-default-PXU3X9q8BWm7ErgGU9psHLWy8naGws.jpg")
+  imageUrl  String      @default("https://gedhuiyjqbzrvz6n.public.blob.vercel-storage.com/stores/store-default-PXU3X9q8BWm7ErgGU9psHLWy8naGws.jpg")
   email     String?
   phoneNo   String?
-  items     Item[]                                @relation(name: "StoreItems")
+  items     Item[]      @relation(name: "StoreItems")
+}
+
+model User {
+  uid               String         @default(cuid()) @id
+  name              String         @unique
+  homeSortcode      String?
+  nationalities     Nationality[]  @relation(name: "UserNationalities")
+  favouriteRecipes  Recipe[]       @relation(name: "UserFavouriteRecipes")
+}
+
+model Recipe {
+  rid               String         @default(cuid()) @id
+  name              String         @unique
+  nationalities     Nationality[]  @relation(name: "RecipeNationalities")
+  description       String?
+  timeToCook        Int?
+  imageUrl          String?
+  items             Item[]         @relation(name: "RecipeItems")
+  favouritedByUsers User[]         @relation(name: "UserFavouriteRecipes")
+}
+
+model Nationality {
+  nid       String    @default(cuid()) @id
+  name      String    @unique
+  users     User[]    @relation(name: "UserNationalities")
+  recipes   Recipe[]  @relation(name: "RecipeNationalities")
 }
