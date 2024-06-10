@@ -56,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingredients }) => {
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: "AIzaSyAZQITL5AWcrnNWaeh_zQpllcI-5fPGmC4", // Make sure this is secured in production environments
+        googleMapsApiKey: "AIzaSyAZQITL5AWcrnNWaeh_zQpllcI-5fPGmC4",
         libraries,
     });
 

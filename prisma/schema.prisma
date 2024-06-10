@@ -47,7 +47,7 @@ model Recipe {
   description       String?
   timeToCook        Int?
   imageUrl          String?
-  items             String[]       
+  items             String[]
   favouritedByUsers User[]         @relation(name: "UserFavouriteRecipes")
 }
 

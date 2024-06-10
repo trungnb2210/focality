@@ -53,7 +53,7 @@ const IngredientsPage: React.FC<IngredientsPageProps> = ({ ingredients }) => {
         let newList = [...ingredientList].map(ingredient =>
                 ingredient.startsWith('Any ')? ingredient.substring(4) : ingredient
             );
-    
+
         return newList;
        };
 
