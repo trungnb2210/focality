@@ -31,12 +31,19 @@ const UploadComponent: React.FC<UploadComponentProps> = ({ storeId }) => {
               return;
             }
             const rowValues = row.values;
-            if (!rowValues) {
-              // Handle the case where row.values is null or undefined
-              return; // or throw an error, depending on your use case
-            }
+            let slicedValues: ExcelJS.CellValue[] = [];
+            if (Array.isArray(row.values)) {
+                slicedValues = row.values.slice(1);
+              } else {
+                // Handle the case where rowValues is not an array
+                console.error("rowValues is not an array:", rowValues);
+              }
+            // if (!rowValues) {
+            //   // Handle the case where row.values is null or undefined
+            //   return; // or throw an error, depending on your use case
+            // }
 
-            const [name, nativeName, price, imageUrl, description] = (rowValues.slice(1) || []) as string[];
+            const [name, nativeName, price, imageUrl, description] = (slicedValues) as string[];
 
             if (name && sid) {
               console.log(sid);
@@ -65,13 +72,13 @@ const UploadComponent: React.FC<UploadComponentProps> = ({ storeId }) => {
           } else {
             setError(`Error: ${result.error}`);
           }
-        } catch (error) {
+        } catch (error: any) {
           setError(`Error: ${error.message}`);
         }
       };
 
       reader.readAsArrayBuffer(file); // Read the file as ArrayBuffer
-    } catch (error) {
+    } catch (error: any) {
       setError(`Error: ${error.message}`);
     }
   };
