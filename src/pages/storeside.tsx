@@ -1,8 +1,19 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { parse } from 'papaparse';
 import "../app/globals.css"
+import ExcelJS from 'exceljs';
+import UploadComponent from './upload-comp';
+
+export interface Item2 {
+  name: string;
+  nativeName?: string;
+  price: number;
+  imageUrl?: string;
+  description?: string;
+  storeId: string;
+};
 
 export interface Item {
   iid: string;
@@ -12,7 +23,6 @@ export interface Item {
   imageUrl: string;
   description: string;
   storeId: string;
-  store: Store;
 }
 
 export interface Store {
@@ -33,7 +43,7 @@ export default function StoreSide() {
   const [description, setDescription] = useState('');
   const [storeId, setStoreId] = useState('');
   const [stores, setStores] = useState<Store[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState('');
   const [itemsCsv, setItemsCsv] = useState<File | null>(null);
   const [storeItems, setStoreItems] = useState<Item[]>([]);
@@ -201,6 +211,33 @@ export default function StoreSide() {
     }
   };
 
+  const handleDownloadItems = async () => {
+    if (!storeId) {
+      setError('Please select a store first.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/excel-download?storeId=${storeId}`);
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'items.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error);
+      }
+    } catch (error) {
+      console.error('Failed to download items:', error);
+      setError('Failed to download items.');
+    }
+  };
+
   return (
     <div className="max-w-md mx-auto bg-white p-8 rounded-md shadow-md">
       <div className="mb-4">
@@ -224,6 +261,13 @@ export default function StoreSide() {
         </select>
       </div>
   
+      <button
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+              onClick={handleDownloadItems}
+            >
+              Download Items as Excel
+      </button>
+
       <div className="mt-8">
         <h2 className="text-2xl font-bold mb-4">Store Items</h2>
         {storeItems.length > 0 ? (
@@ -372,6 +416,9 @@ export default function StoreSide() {
             </button>
           </div>
         )}
+      </div>
+      <div>
+        <UploadComponent storeId={storeId} />
       </div>
     </div>
   );

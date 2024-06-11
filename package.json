@@ -20,6 +20,7 @@
     "@types/react-select": "^5.0.1",
     "@vercel/blob": "^0.23.3",
     "@vercel/postgres": "^0.8.0",
+    "exceljs": "^4.4.0",
     "formidable": "^3.5.1",
     "jest-environment-jsdom": "^29.7.0",
     "multiselect-react-dropdown": "^2.0.25",
@@ -33,6 +34,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^15.0.7",
+    "@types/formidable": "^3.4.5",
     "@types/jest": "^29.5.12",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.14",
