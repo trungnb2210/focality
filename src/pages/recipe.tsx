@@ -272,6 +272,7 @@ const RecipeModal: React.FC<{ recipe: Recipe; onClose: () => void; onAddToBasket
 
   const handleItemChange = (item: string) => {
     if (selectedItems.includes(item)) {
+      setAllSelected(false);
       setSelectedItems(selectedItems.filter(i => i !== item));
     } else {
       setSelectedItems([...selectedItems, item]);
