@@ -2,8 +2,7 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { parse } from 'papaparse';
-import "../app/globals.css"
-import ExcelJS from 'exceljs';
+import "@/app/globals.css"
 import UploadComponent from './upload-comp';
 
 export interface Item2 {
@@ -53,7 +52,7 @@ export default function StoreSide() {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const response = await fetch('/api/fetch-stores');
+        const response = await fetch('../api/fetch-stores');
         const data = await response.json();
         setStores(data);
       } catch (error) {
@@ -66,7 +65,7 @@ export default function StoreSide() {
 
   const fetchStoreItems = async (storeId : String) => {
     try {
-      const response = await fetch(`/api/fetch-items?storeId=${storeId}`);
+      const response = await fetch(`../api/fetch-items?storeId=${storeId}`);
       const data = await response.json();
       setStoreItems(data);
     } catch (error) {
@@ -83,14 +82,14 @@ export default function StoreSide() {
       const formData = new FormData();
       formData.append('file', image);
 
-      const uploadResponse = await fetch('/api/upload-image', {
+      const uploadResponse = await fetch('../api/upload-image', {
         method: 'POST',
         body: formData,
       });
 
       if (uploadResponse.ok) {
         const uploadData = await uploadResponse.json();
-        imageUrl = uploadData.url; // The URL of the uploaded image
+        imageUrl = uploadData.url; 
       } else {
         const uploadErrorData = await uploadResponse.json();
         setError(uploadErrorData.error);
@@ -98,7 +97,7 @@ export default function StoreSide() {
       }
     }
 
-    const response = await fetch('/api/add-item', {
+    const response = await fetch('../api/add-item', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -150,7 +149,7 @@ export default function StoreSide() {
           for (const item of items) {
             const price = item.price;
             const imageUrl = "https://gedhuiyjqbzrvz6n.public.blob.vercel-storage.com/ingredients/item_default-ZTc4HHFitsmUuquJz898puf6XoHrTh.jpg";
-            const response = await fetch('/api/add-item', {
+            const response = await fetch('../api/add-item', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -192,7 +191,7 @@ export default function StoreSide() {
 
   const handleDeleteItem = async (itemId: string) => {
     try {
-      const response = await fetch(`/api/del-item?iid=${itemId}`, {
+      const response = await fetch(`../api/del-item?iid=${itemId}`, {
         method: 'DELETE',
       });
 
@@ -218,7 +217,7 @@ export default function StoreSide() {
     }
 
     try {
-      const response = await fetch(`/api/excel-download?storeId=${storeId}`);
+      const response = await fetch(`../api/excel-download?storeId=${storeId}`);
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);

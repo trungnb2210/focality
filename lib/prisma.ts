@@ -2,8 +2,23 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function createOrUpdateItem(name: string, nativeName:string|undefined, price:number, imageUrl:string|undefined, description:string|undefined, storeId:string) {
+export async function createOrUpdateItem(
+  name: string,
+  nativeName: string | undefined,
+  price: number,
+  imageUrl: string | undefined,
+  description: string | undefined,
+  storeId: string
+) {
     try {
+      const store = await prisma.store.findUnique({
+        where: { sid: storeId }
+      });
+    
+      if (!store) {
+        throw new Error(`Store with id ${storeId} does not exist.`);
+      }
+
       let existingItem = await prisma.item.findFirst({
         where: {
           AND: [
@@ -44,9 +59,5 @@ export async function createOrUpdateItem(name: string, nativeName:string|undefin
       return "Error occurred";
     }
   }
-  
-  // Usage example
-  createOrUpdateItem("Item Name", "Native Name", 10.99, "image.jpg", "Description", "store123")
-    .then(result => console.log(result));
 
 export default prisma;

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
-import { Store } from '../storeside';
+import { Store } from '../storeside/storeside';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

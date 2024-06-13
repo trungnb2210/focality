@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useLoadScript, Autocomplete } from '@react-google-maps/api';
 import { Loader } from '@googlemaps/js-api-loader';
 import { GetServerSideProps } from 'next';
-import "../app/globals.css";
+import "@/app/globals.css";
 import NavBar from '@/components/NavBar';
 import ItemComponent from '@/components/storeItem';
 import LocationInput from '@/components/LocationInput';
@@ -72,7 +72,7 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
     const fetchStores = async (location: string) => {
         const ingredientsParam = encodeURIComponent(JSON.stringify(ingredients));
         const locationParam = encodeURIComponent(location);
-        const response = await fetch(`/api/distance?ingredients=${ingredientsParam}&currentLocation=${locationParam}`);
+        const response = await fetch(`../api/distance?ingredients=${ingredientsParam}&currentLocation=${locationParam}`);
         const data = await response.json();
         setStores(data.stores);
         setCurrentLocation(location);

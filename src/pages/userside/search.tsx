@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import "../app/globals.css";
+import "@/app/globals.css";
 import NavBar from '@/components/NavBar';
 import { SearchBar } from '@/components/SearchBar';
 import { FaShoppingCart } from "react-icons/fa";

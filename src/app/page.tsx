@@ -7,7 +7,7 @@ export default async function Home() {
   return (
     <main className="">
         <Link href={{
-            pathname: "recipe",
+            pathname: "userside/recipe",
             query: {
                 username: "Kevin Nguyen" as string,
             }
@@ -17,10 +17,7 @@ export default async function Home() {
             I am a user
         </Link>
         <Link href={{
-            pathname: "storeside",
-            // query: {
-            //     ingredient
-            // }
+            pathname: "storeside/storeside",
         }}
         className="font-semibold p-3 rounded-xl bg-[#EEF5DB] text-[#3E3F3B] hover:bg-[#3E3F3B] 
         hover:text-[#EEF5DB] border-2 border-[#3E3F3B]">

@@ -5,7 +5,7 @@ import React, { useRef, useState } from 'react';
 import { useLoadScript, Autocomplete } from '@react-google-maps/api';
 import { Loader } from '@googlemaps/js-api-loader';
 import { GetServerSideProps } from 'next';
-import "../app/globals.css"
+import "@/app/globals.css"
 import NavBar from '@/components/NavBar';
 
 const libraries: Loader["libraries"] = ["places"];

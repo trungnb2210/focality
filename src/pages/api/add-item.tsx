@@ -10,6 +10,14 @@ export default async function handler(request: NextApiRequest, response: NextApi
         return response.status(400).json({ error: 'Name and storeId are required' });
       }
 
+      const store = await prisma.store.findUnique({
+        where: { sid: storeId }
+      });
+    
+      if (!store) {
+        throw new Error(`Store with id ${storeId} does not exist.`);
+      }
+
       const newItem = await prisma.item.create({
         data: {
           name,

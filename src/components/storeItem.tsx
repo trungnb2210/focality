@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { IoLocationSharp } from "react-icons/io5";
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
-import { Store } from "../pages/store";
+import { Store } from "../pages/userside/store";
 
 interface Item {
     iid: string;

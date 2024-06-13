@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import "../app/globals.css"
+import "@/app/globals.css"
 import NavBar from '@/components/NavBar';
 import { FaArrowLeft, FaArrowRight, FaHeart, FaRegHeart, FaShoppingCart } from 'react-icons/fa';
 import Link from 'next/link';
@@ -61,7 +61,7 @@ const RecipeList: React.FC<RecipeListProps> = () => {
         const { username, ingredients } = router.query;
         const userName = username ? username as string : "Kevin Nguyen";
 
-        const userResponse = await fetch(`/api/fetch-user?name=${userName}`);
+        const userResponse = await fetch(`../api/fetch-user?name=${userName}`);
         if (!userResponse.ok) {
           throw new Error('Failed to fetch user');
         }
@@ -71,7 +71,7 @@ const RecipeList: React.FC<RecipeListProps> = () => {
         setFavouriteRecipes(user.favouriteRecipes);
         const nationalityNames = user.nationalities.map(nat => nat.name);
         const recipePromises = nationalityNames.map(name =>
-          fetch(`/api/fetch-recipe?nationality=${name}`)
+          fetch(`../api/fetch-recipe?nationality=${name}`)
             .then(res => res.json())
         );
 
@@ -135,7 +135,7 @@ const RecipeList: React.FC<RecipeListProps> = () => {
   const toggleFavourite = async (recipe: Recipe) => {
     try {
       const isFavourite = favouriteRecipes.some(favRecipe => favRecipe.rid === recipe.rid);
-      const response = await fetch(`/api/update-favourite`, {
+      const response = await fetch(`../api/update-favourite`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import ExcelJS from 'exceljs';
-import { Item2 } from '@/pages/storeside';
+import { Item2 } from '@/pages/storeside/storeside';
 
 interface UploadComponentProps {
   storeId: string;
@@ -38,11 +38,7 @@ const UploadComponent: React.FC<UploadComponentProps> = ({ storeId }) => {
                 // Handle the case where rowValues is not an array
                 console.error("rowValues is not an array:", rowValues);
               }
-            // if (!rowValues) {
-            //   // Handle the case where row.values is null or undefined
-            //   return; // or throw an error, depending on your use case
-            // }
-
+              
             const [name, nativeName, price, imageUrl, description] = (slicedValues) as string[];
 
             if (name && sid) {
@@ -58,7 +54,7 @@ const UploadComponent: React.FC<UploadComponentProps> = ({ storeId }) => {
             }
           });
 
-          const response = await fetch('/api/excel-upload', {
+          const response = await fetch('../api/excel-upload', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
