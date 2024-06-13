@@ -163,14 +163,20 @@ const RecipeList: React.FC<RecipeListProps> = () => {
       {dailySuggestion && (
         <div className="text-center p-4">
           <h1 className="font-semibold text-lg">Daily Suggested Recipe</h1>
-          <div
-            className="relative rounded-lg shadow-lg overflow-hidden w-full my-4 max-w-md mx-auto cursor-pointer hover:bg-gray-200 transition duration-300"
-            onClick={() => setSelectedRecipe(dailySuggestion)}
-            ref={recRef}
-          >
-            <img src={dailySuggestion.imageUrl || 'default-image.jpg'} alt={dailySuggestion.name} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black bg-opacity-20 p-4 bottom-0 left-0">
-              <h3 className="text-white text-xl font-bold">{dailySuggestion.name}</h3>
+          <div className="relative rounded-lg shadow-lg overflow-hidden w-full my-4 max-w-md mx-auto cursor-pointer hover:bg-gray-200 transition duration-300">
+            <button className="absolute top-2 left-2 bg-white text-red-500 rounded-full p-2 z-10" onClick={() => toggleFavourite(dailySuggestion)}>
+                    {favouriteRecipes.some(favRecipe => favRecipe.rid === dailySuggestion.rid) ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+                </button>
+            <div
+                className=""
+                onClick={() => setSelectedRecipe(dailySuggestion)}
+                ref={recRef}
+            >
+                
+                <img src={dailySuggestion.imageUrl || 'default-image.jpg'} alt={dailySuggestion.name} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black bg-opacity-20 p-4 bottom-0 left-0">
+                <h3 className="text-white text-xl font-bold">{dailySuggestion.name}</h3>
+                </div>
             </div>
           </div>
         </div>
@@ -180,7 +186,9 @@ const RecipeList: React.FC<RecipeListProps> = () => {
         <div className="relative">
           <div ref={favRef} className="flex overflow-x-auto space-x-4 p-4 h-60 scrollbar-hide">
             {favouriteRecipes.map((recipe) => (
-              <RecipeCard key={recipe.rid} recipe={recipe} onClick={() => setSelectedRecipe(recipe)} />
+              <RecipeCard key={recipe.rid} recipe={recipe} onClick={() => setSelectedRecipe(recipe)} 
+              onToggleFavourite={toggleFavourite}
+          isFavourite={favouriteRecipes.some(favRecipe => favRecipe.rid === recipe.rid)}/>
             ))}
           </div>
           <button
@@ -204,7 +212,9 @@ const RecipeList: React.FC<RecipeListProps> = () => {
         <div className="relative">
           <div ref={recRef} className="flex overflow-x-auto space-x-4 p-4 h-60 scrollbar-hide">
             {recipes.map((recipe) => (
-              <RecipeCard key={recipe.rid} recipe={recipe} onClick={() => setSelectedRecipe(recipe)} />
+              <RecipeCard key={recipe.rid} recipe={recipe} onClick={() => setSelectedRecipe(recipe)} 
+              onToggleFavourite={toggleFavourite}
+          isFavourite={favouriteRecipes.some(favRecipe => favRecipe.rid === recipe.rid)}/>
             ))}
           </div>
           <button
@@ -257,11 +267,16 @@ const RecipeList: React.FC<RecipeListProps> = () => {
   );
 }
 
-const RecipeCard: React.FC<{ recipe: Recipe; onClick: () => void }> = ({ recipe, onClick }) => (
-  <div className="relative rounded-lg shadow-lg overflow-hidden sm:w-80 w-60 flex-shrink-0 cursor-pointer" onClick={onClick}>
-    <img src={recipe.imageUrl || 'default-image.jpg'} alt={recipe.name} className="w-full h-full object-cover" />
-    <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-4">
-      <h3 className="text-white text-xl font-bold">{recipe.name}</h3>
+const RecipeCard: React.FC<{ recipe: Recipe; onClick: () => void; onToggleFavourite: (recipe: Recipe) => void; isFavourite: boolean }> = ({ recipe, onClick, onToggleFavourite, isFavourite }) => (
+  <div className="relative rounded-lg shadow-lg overflow-hidden sm:w-80 w-60 flex-shrink-0 cursor-pointer">
+    <button className="absolute top-2 left-2 bg-white text-red-500 rounded-full p-2 z-10" onClick={() => onToggleFavourite(recipe)}>
+            {isFavourite ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+    </button>
+    <div  onClick={onClick}>
+        <img src={recipe.imageUrl || 'default-image.jpg'} alt={recipe.name} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-4">
+        <h3 className="text-white text-xl font-bold">{recipe.name}</h3>
+        </div>
     </div>
   </div>
 );
