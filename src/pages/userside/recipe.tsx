@@ -7,6 +7,8 @@ import Router, { useRouter } from 'next/router';
 import CircularProgress from '@mui/material/CircularProgress';
 import { IoClose } from 'react-icons/io5';
 import { GiCookingPot } from "react-icons/gi";
+import { LuBeef } from "react-icons/lu";
+import { GiBroccoli } from "react-icons/gi";
 
 export interface Recipe {
   rid: string;
@@ -178,6 +180,10 @@ const RecipeList: React.FC<RecipeListProps> = () => {
                 <div className="absolute inset-0 bg-black bg-opacity-20 p-4 text-white text-xl font-bold">
                     <h3 className="">{dailySuggestion.name}</h3>
                     <div className="flex items-center absolute bottom-0 left-0 pb-4 pl-4"><GiCookingPot className="mr-1"/>{dailySuggestion.timeToCook} min</div>
+                    <div className="flex items-center absolute bottom-0 right-0 pb-4 pr-4">
+                        <div className="bg-green-400 bg-opacity-80 px-2 py-1 rounded-xl mr-2"><GiBroccoli size={20}/></div>
+                        <div className="bg-red-400 bg-opacity-90 px-2 py-1 rounded-xl"><LuBeef size={20}/></div>
+                    </div>
                 </div>
             </div>
           </div>
@@ -257,10 +263,10 @@ const RecipeList: React.FC<RecipeListProps> = () => {
             }
           }}
         >
-          See Ingredients
+          View Cart
           {basket.size > 0 && (
-            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-sm bg-red-600 text-white rounded-full px-2">
-              {basket.size}
+            <span className="">
+               ({basket.size})
             </span>
           )}
         </Link>

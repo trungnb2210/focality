@@ -49,7 +49,15 @@ export default function StoreSide() {
   const [storeItems, setStoreItems] = useState<Item[]>([]);
   const [selectedFileType, setSelectedFileType] = useState('');
   const [selectedItemId, setSelectedItemId] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  
   const router = useRouter();
+
+  const filteredItems = storeItems.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.nativeName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     const fetchStores = async () => {
@@ -506,9 +514,18 @@ export default function StoreSide() {
         </div>
       </form>
   
-      <div className="mt-8">
+    <div className="mt-8">
         <h2 className="text-2xl font-bold mb-4">Current Store Items</h2>
-        {storeItems.length > 0 ? (
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search items by name"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        {filteredItems.length > 0 ? (
           <table className="min-w-full bg-white border border-gray-300 rounded-md shadow-sm">
             <thead>
               <tr className="bg-gray-100 border-b">
@@ -521,14 +538,14 @@ export default function StoreSide() {
               </tr>
             </thead>
             <tbody>
-              {storeItems.map((item) => (
+              {filteredItems.map((item) => (
                 <tr key={item.iid} className="border-b hover:bg-gray-50">
                   <td className="py-2 px-4">
                     <img src={item.imageUrl} alt={item.name} className="h-16 w-16 object-cover" />
                   </td>
                   <td className="py-2 px-4">{item.name}</td>
                   <td className="py-2 px-4">{item.nativeName}</td>
-                  <td className="py-2 px-4">£{item.price}</td>
+                  <td className="py-2 px-4">£{item.price.toFixed(2)}</td>
                   <td className="py-2 px-4">{item.description}</td>
                   <td className="py-2 px-4">
                     <button
@@ -547,6 +564,5 @@ export default function StoreSide() {
         )}
       </div>
     </div>
-  );
-  
+    );
 }
