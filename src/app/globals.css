@@ -18,7 +18,7 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: #F1F1E9FF;
+  background: rgb(255, 255, 255);
   font-family: inter;
   color: #020617;
 }

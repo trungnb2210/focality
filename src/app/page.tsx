@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default async function Home() {
   return (
-    <main className="">
+    <main className="flex flex-col">
         <Link href={{
             pathname: "userside/recipe",
             query: {
@@ -13,7 +13,7 @@ export default async function Home() {
             }
         }}
         className="font-semibold p-3 rounded-xl bg-[#EEF5DB] text-[#3E3F3B] hover:bg-[#3E3F3B] 
-        hover:text-[#EEF5DB] border-2 border-[#3E3F3B]">
+        hover:text-[#EEF5DB] border-2 border-[#3E3F3B] mb-4">
             I am a user
         </Link>
         <Link href={{

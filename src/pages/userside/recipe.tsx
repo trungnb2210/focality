@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
 import CircularProgress from '@mui/material/CircularProgress';
 import { IoClose } from 'react-icons/io5';
+import { GiCookingPot } from "react-icons/gi";
 
 export interface Recipe {
   rid: string;
@@ -174,8 +175,9 @@ const RecipeList: React.FC<RecipeListProps> = () => {
             >
                 
                 <img src={dailySuggestion.imageUrl || 'default-image.jpg'} alt={dailySuggestion.name} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-black bg-opacity-20 p-4 bottom-0 left-0">
-                <h3 className="text-white text-xl font-bold">{dailySuggestion.name}</h3>
+                <div className="absolute inset-0 bg-black bg-opacity-20 p-4 text-white text-xl font-bold">
+                    <h3 className="">{dailySuggestion.name}</h3>
+                    <div className="flex items-center absolute bottom-0 left-0 pb-4 pl-4"><GiCookingPot className="mr-1"/>{dailySuggestion.timeToCook} min</div>
                 </div>
             </div>
           </div>
@@ -248,7 +250,7 @@ const RecipeList: React.FC<RecipeListProps> = () => {
         <Link
           className="relative py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
           href={{
-            pathname: "/search",
+            pathname: "/userside/search",
             query: {
               ingredients: Array.from(basket),
               address: user?.homeSortcode
@@ -272,10 +274,11 @@ const RecipeCard: React.FC<{ recipe: Recipe; onClick: () => void; onToggleFavour
     <button className="absolute top-2 left-2 bg-white text-red-500 rounded-full p-2 z-10" onClick={() => onToggleFavourite(recipe)}>
             {isFavourite ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
     </button>
-    <div  onClick={onClick}>
+    <div className="text-white" onClick={onClick}>
         <img src={recipe.imageUrl || 'default-image.jpg'} alt={recipe.name} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-4">
-        <h3 className="text-white text-xl font-bold">{recipe.name}</h3>
+            <h3 className="text-xl font-bold">{recipe.name}</h3>
+            <div className="flex items-center"><GiCookingPot className="mr-1"/>{recipe.timeToCook} min</div>
         </div>
     </div>
   </div>

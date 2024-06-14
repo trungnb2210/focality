@@ -92,7 +92,7 @@ const LocationInput: React.FC<{ onLocationSelect: (location: string) => void; in
                 </Autocomplete>
                 <button
                     onClick={handleSearchClick}
-                    className="ml-2 py-2 px-4 border border-gray-300 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
+                    className="ml-2 py-2 px-4 bg-[#4F6367] rounded-2xl text-white hover:bg-[#B8D8D8] hover:text-black"
                 >
                     Search
                 </button>
