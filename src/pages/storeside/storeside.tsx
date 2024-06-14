@@ -129,8 +129,7 @@ export default function StoreSide() {
       setPrice('');
       setImage(null);
       setDescription('');
-      setStoreId('');
-      router.push('/');
+      fetchStoreItems(storeId);
     } else {
       const errorData = await response.json();
       setError(errorData.error);
@@ -212,6 +211,7 @@ export default function StoreSide() {
                 setSuccess('Items added successfully!');
                 setError('');
                 setItemsCsv(null);
+                fetchStoreItems(storeId);
               } else {
                 const errorData = await response.json();
                 setError(errorData.error || 'Failed to upload items.');
@@ -240,7 +240,6 @@ export default function StoreSide() {
       if (response.ok) {
         setSuccess('Item deleted successfully!');
         setError('');
-        // Refetch the items after deletion
         fetchStoreItems(storeId);
       } else {
         const errorData = await response.json();
@@ -329,6 +328,7 @@ export default function StoreSide() {
             if (response.ok) {
               setSuccess('File uploaded successfully');
               setError('');
+              fetchStoreItems(storeId);
             } else {
               throw new Error(result.error);
             }
@@ -437,7 +437,7 @@ export default function StoreSide() {
               <button
                 type="button"
                 className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
-                onClick={handleDownloadCsv}
+                onClick={handleDownloadExcel}
               >
                 Download Items
               </button>
