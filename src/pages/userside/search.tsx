@@ -93,7 +93,7 @@ const SearchIngredientPage: React.FC = () => {
             ))}
           </div>
         </div>
-        <div className="flex justify-center w-full items-center font-bold pt-5 mb-10">
+        <div className="flex justify-center w-full items-center font-bold pt-5">
             Cart
             <div
             className="relative mr-2 px-2 text-[#3E3F3B] font-bold flex items-center justify-center"
@@ -108,7 +108,7 @@ const SearchIngredientPage: React.FC = () => {
         </div>
         {selectedIngredients.length > 0 && (
           <>
-            <div className="items-center grid grid-cols-1 divide-y">
+            <div className="items-center grid grid-cols-1 divide-y mb-16">
               {selectedIngredients.map((ingredient, index) => (
                 <div
                   key={index}
@@ -125,6 +125,7 @@ const SearchIngredientPage: React.FC = () => {
           </>
         )}
       </main>
+      <div className=''></div>
       <footer className="w-full flex justify-center items-center fixed bottom-0 left-0 right-0 bg-white drop-shadow-4xl backdrop-filter backdrop-blur-lg bg-opacity-40 py-2">
         <button onClick={() =>
             router.push({
