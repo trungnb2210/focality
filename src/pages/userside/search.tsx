@@ -93,7 +93,7 @@ const SearchIngredientPage: React.FC = () => {
             ))}
           </div>
         </div>
-        <div className="flex justify-center w-full items-center font-bold pt-5">
+        <div className="flex justify-center w-full items-center font-bold pt-5 mb-10">
             Cart
             <div
             className="relative mr-2 px-2 text-[#3E3F3B] font-bold flex items-center justify-center"
