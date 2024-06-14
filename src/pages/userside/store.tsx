@@ -130,7 +130,7 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
     return (
         <div className="flex flex-col h-screen">
             <NavBar brandName='Stores List' />
-            <div className="p-4 drop-shadow-sm lg:flex lg:justify-between">
+            <div className="p-4 drop-shadow-sm ">
                 <div className="flex">
                     <LocationInput onLocationSelect={handleLocationSelect} initialAddress={currentLocation} />
                 </div>

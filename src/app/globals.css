@@ -3,9 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
+    background-color: #ffffff;
+  /* --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 255, 255, 255;
+  --background-end-rgb: 255, 255, 255; */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,6 +22,16 @@ body {
   background: rgb(255, 255, 255);
   font-family: inter;
   color: #020617;
+  /* width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 100vh; */
+}
+
+footer {
+    /* width: 460px;
+    margin-left: auto;
+    margin-right: auto; */
 }
 
 @layer utilities {

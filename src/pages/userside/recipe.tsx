@@ -251,8 +251,8 @@ const RecipeList: React.FC<RecipeListProps> = () => {
         />
       )}
       <div className="h-10"></div>
-      <footer className="w-full flex justify-center items-center fixed bottom-0 left-0 right-0 
-      bg-white drop-shadow-4xl backdrop-filter backdrop-blur-lg bg-opacity-40 py-2">
+      <footer className="flex justify-center items-center fixed bottom-0 left-0 right-0
+      bg-white drop-shadow-4xl backdrop-filter backdrop-blur-lg bg-opacity-40 py-2 z-20">
         <Link
           className="relative py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
           href={{
