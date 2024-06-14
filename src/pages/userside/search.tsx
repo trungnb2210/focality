@@ -27,6 +27,7 @@ const SearchIngredientPage: React.FC = () => {
       if (query.address) {
         const addr = query.address as string;
         setAddress(addr);
+        console.log(address)
       }
     } else {
       setFrequent(initialFrequent);
@@ -132,10 +133,10 @@ const SearchIngredientPage: React.FC = () => {
                     ingredients: preprocessIngredients(selectedIngredients)
                 } })}
           className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold mx-2">Find Recipes</button>
-        <button onClick={() => 
+        <button onClick={() =>
             router.push({ 
                 pathname: "/userside/store",
-                query: { 
+                query: {
                     ingredients: preprocessIngredients(selectedIngredients),
                     address: address ? address : ""
                 } })}

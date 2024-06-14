@@ -173,7 +173,7 @@ const RecipeList: React.FC<RecipeListProps> = () => {
                 onClick={() => setSelectedRecipe(dailySuggestion)}
                 ref={recRef}
             >
-                
+
                 <img src={dailySuggestion.imageUrl || 'default-image.jpg'} alt={dailySuggestion.name} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black bg-opacity-20 p-4 text-white text-xl font-bold">
                     <h3 className="">{dailySuggestion.name}</h3>

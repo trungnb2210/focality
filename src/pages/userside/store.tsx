@@ -138,7 +138,8 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
                     <select
                         value={sortCriteria}
                         onChange={(e) => setSortCriteria(e.target.value)}
-                        className="content-fit p-2 inline rounded-2xl drop-shadow-sm bg-[#B8D8D8] mx-2"
+                        className="content-fit p-2 inline rounded-2xl drop-shadow-sm bg-[#B8D8D8] 
+                        mx-2 font-semibold text-gray-700"
                     >
                         <option value="matchedIngredients">Sort by Available Ingredient</option>
                         <option value="distance">Sort by Distance</option>

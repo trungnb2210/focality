@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { IoLocationSharp } from "react-icons/io5";
 import { Store } from "../pages/userside/store";
 import { IoClose } from 'react-icons/io5';
+import { TiTick } from "react-icons/ti";
 
 interface Item {
     iid: string;
@@ -47,20 +48,33 @@ const ItemComponent: React.FC<ItemComponentProp> = ({ store, ingredients, distan
                 <img src={store.imageUrl} alt={`Store front of ${store.name}`} className="w-full h-full object-cover" />
             </div>
             <div className="w-full sm:w-2/3 mb-5">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                     <div className=" inline-flex flex-row drop-shadow-sm">
                         <h3 className="text-xl">{store.name}</h3>
                         <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.name || '')}+${store.sortcode}`}
                             target="_blank" rel="noopener noreferrer"
-                            className="inline-flex items-center bg-opacity-70 text-sky-500 p-1 ml-2 w-fit pr-2 rounded-xl text-sm">
+                            className="inline-flex items-center bg-opacity-70 text-sky-500 ml-2 w-fit pr-2 rounded-xl text-sm">
                             <IoLocationSharp size={20} />
                             <p className="">{store.sortcode}</p>
                         </a>
                     </div>
-                    <div className="bg-[#FE5F55] px-3 py-2 backdrop-filter backdrop-blur-lg rounded-2xl bg-opacity-70 border-[#E23E3E]/50 h-fit">
-                        <h3 className="text-white text-sm font-bold">{distance.toFixed(2)} km</h3>
+                    <div className="py-2 backdrop-filter backdrop-blur-lg rounded-2xl bg-opacity-70 border-[#E23E3E]/50 h-fit">
+                        <h3 className="font-semibold">{distance.toFixed(2)} km</h3>
                     </div>
                 </div>
+                <div className="mb-4 divide-y divide-gray-300">
+                                {availableItems.map(item => (
+                                    <div key={item.iid} className="pt-2 pb-1 flex items-center text-sm">
+                                        {item.imageUrl &&
+                                            <img
+                                                src={item.imageUrl}
+                                                alt={`Image of ${item.nativeName ? item.nativeName : item.name}`}
+                                                className="w-6 h-6 mr-2"
+                                            />}
+                                        {item.name} {item.nativeName ? `(${item.nativeName})` : ''} - <span className="font-semibold"> £{item.price.toFixed(2)}</span>
+                                    </div>
+                                ))}
+                            </div>
                 {/* <div className="bg-white px-4 py-2 flex flex-col h-fit">
                     <div>
                         <div><span className="font-semibold">Email: </span>{store.email}</div>
@@ -119,9 +133,9 @@ const ItemComponent: React.FC<ItemComponentProp> = ({ store, ingredients, distan
                                 <IoLocationSharp size={20} />
                                 <p className="">{store.sortcode}</p>
                             </a>
-                            <p className="mb-4"><span className="font-semibold">Email: </span>{store.email}</p>
-                            <p className="mb-4"><span className="font-semibold">Phone Number: </span>{store.phoneNo}</p>
-                            <h3 className="font-semibold mb-2 text-[#1C941F]">Ingredients Available</h3>
+                            <p className="mb-1 text-sm"><span className="font-semibold">Email: </span>{store.email}</p>
+                            <p className="mb-2 text-sm"><span className="font-semibold">Phone Number: </span>{store.phoneNo}</p>
+                            <h3 className="font-semibold mb-2 text-[#1C941F]"><TiTick size={20}/></h3>
                             <div className="mb-4 divide-y divide-gray-300">
                                 {availableItems.map(item => (
                                     <div key={item.iid} className="pt-2 pb-1 flex items-center text-sm">
@@ -135,7 +149,7 @@ const ItemComponent: React.FC<ItemComponentProp> = ({ store, ingredients, distan
                                     </div>
                                 ))}
                             </div>
-                            <h3 className="font-semibold mb-2 text-[#E23E3E]">Ingredients Unavailable</h3>
+                            <h3 className="font-semibold mb-2 text-[#E23E3E]"><IoClose size={20}/></h3>
                             <div className="mb-4 divide-y divide-gray-300">
                                 {unavailableItems.map(ingredient => (
                                     <div key={ingredient} className="pt-2 pb-1 text-gray-700 text-sm">
