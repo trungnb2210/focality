@@ -346,6 +346,14 @@ export default function StoreSide() {
 
   return (
     <div className="max-w-2xl mx-auto bg-white p-6 rounded-md shadow-md mt-10">
+      <a
+        href="https://drive.google.com/file/d/1Ri8xnCxDgE-NiCf3CoBpEw4HF5oulKBM/view?usp=sharing"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block mb-4 py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold text-center"
+      >
+        Watch Tutorial Video
+      </a>
       {error && <p className="text-red-600 mb-4">{error}</p>}
       {success && <p className="text-green-600 mb-4">{success}</p>}
 
