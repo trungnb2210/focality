@@ -7,7 +7,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'POST') {
       try {
         const items: Item2[] = req.body;
-        console.log(JSON.stringify(items));
         if (!Array.isArray(items) || items.length === 0) {
           return res.status(400).json({ error: 'Invalid data' });
         }

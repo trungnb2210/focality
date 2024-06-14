@@ -11,6 +11,9 @@ export async function createOrUpdateItem(
   storeId: string
 ) {
     try {
+      if (imageUrl === "" || imageUrl === undefined) {
+        imageUrl = "https://gedhuiyjqbzrvz6n.public.blob.vercel-storage.com/ingredients/item_default-ZTc4HHFitsmUuquJz898puf6XoHrTh.jpg";
+      }
       const store = await prisma.store.findUnique({
         where: { sid: storeId }
       });
