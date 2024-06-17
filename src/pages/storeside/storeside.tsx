@@ -345,232 +345,235 @@ export default function StoreSide() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-6 rounded-md shadow-md mt-10">
-      <a
-        href="https://drive.google.com/file/d/1Ri8xnCxDgE-NiCf3CoBpEw4HF5oulKBM/view?usp=sharing"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block mb-4 py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold text-center"
-      >
-        Watch Tutorial Video
-      </a>
-      {error && <p className="text-red-600 mb-4">{error}</p>}
-      {success && <p className="text-green-600 mb-4">{success}</p>}
-
-      <div className="mb-4">
-        <label htmlFor="storeId" className="text-2xl font-bold mb-6">Select Store</label>
-        <select
-          id="storeId"
-          className="mt-1 block w-full text-lg border border-gray-300 rounded-md shadow-sm p-3"
-          value={storeId}
-          onChange={(e) => {
-            setStoreId(e.target.value);
-            fetchStoreItems(e.target.value);
-          }}
-          required
+    <div className="mx-auto bg-white p-6 rounded-md shadow-md mt-10">
+        <a
+            href="https://drive.google.com/file/d/1Ri8xnCxDgE-NiCf3CoBpEw4HF5oulKBM/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block mb-4 py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold text-center"
         >
-          <option value="" disabled>Select a store</option>
-          {stores.map((store) => (
-            <option key={store.sid} value={store.sid}>
-              {store.name}
-            </option>
-          ))}
-        </select>
-      </div>
-  
-      <h1 className="text-2xl font-bold mb-6">Update Items</h1>
+            Watch Tutorial Video
+        </a>
+        {error && <p className="text-red-600 mb-4">{error}</p>}
+        {success && <p className="text-green-600 mb-4">{success}</p>}
 
-      <div className="mb-4">
-        <label htmlFor="fileType" className="block text-sm font-medium text-gray-700">Choose File Type:</label>
-        <select
-          id="fileType"
-          className="block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          value={selectedFileType}
-          onChange={(e) => setSelectedFileType(e.target.value)}
-        >
-          <option value="" disabled>Select file type</option>
-          <option value="xlsx">Excel</option>
-          <option value="csv">CSV</option>
-        </select>
-      </div>
-  
-      {selectedFileType === 'csv' && (
-        <div>
-          <form onSubmit={handleUploadCsv}>
-            <div className="mb-4">
-              <label htmlFor="itemsCsv" className="block text-sm font-medium text-gray-700">Upload Items (.csv):</label>
-              <input
-                type="file"
-                id="itemsCsv"
-                accept=".csv"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                onChange={(e) => setItemsCsv(e.target.files?.[0] || null)}
-                required
-              />
-            </div>
-            <div className="flex justify-center space-x-4 mt-4">
-              <button
-                type="button"
-                className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
-                onClick={handleDownloadCsv}
-              >
-                Download Items
-              </button>
-              <button
-                type="submit"
-                className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
-              >
-                Upload Updated Items
-              </button>
-            </div>
-          </form>
+        <div className="mb-4">
+            <label htmlFor="storeId" className="text-2xl font-bold mb-6">Select Store</label>
+            <select
+            id="storeId"
+            className="mt-1 block w-full text-lg border border-gray-300 rounded-md shadow-sm p-3"
+            value={storeId}
+            onChange={(e) => {
+                setStoreId(e.target.value);
+                fetchStoreItems(e.target.value);
+            }}
+            required
+            >
+            <option value="" disabled>Select a store</option>
+            {stores.map((store) => (
+                <option key={store.sid} value={store.sid}>
+                {store.name}
+                </option>
+            ))}
+            </select>
         </div>
-      )}
-  
-      {selectedFileType === 'xlsx' && (
-        <div>
-          <form onSubmit={handleUploadExcel}>
-            <div className="mb-4">
-              <label htmlFor="itemsExcel" className="block text-sm font-medium text-gray-700">Upload Items (.xlsx):</label>
-              <input
-                type="file"
-                id="itemsExcel"
-                accept=".xlsx"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                onChange={(e) => setItemsExcel(e.target.files?.[0] || null)}
-                required
-              />
-            </div>
-            <div className="flex justify-center space-x-4 mt-4">
-              <button
-                type="button"
-                className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
-                onClick={handleDownloadExcel}
-              >
-                Download Items
-              </button>
-              <button
-                type="submit"
-                className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
-              >
-                Upload Updated Items
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+    
+        <h1 className="text-2xl font-bold mb-6">Update Items</h1>
 
-      <h1 className="text-2xl font-bold mb-6 mt-3">Add New Item</h1>
-      <form onSubmit={handleSubmit} className="mb-8">
         <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name:</label>
-          <input
-            type="text"
-            id="name"
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+            <label htmlFor="fileType" className="block text-sm font-medium text-gray-700">Choose File Type:</label>
+            <select
+            id="fileType"
+            className="block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            value={selectedFileType}
+            onChange={(e) => setSelectedFileType(e.target.value)}
+            >
+            <option value="" disabled>Select file type</option>
+            <option value="xlsx">Excel</option>
+            <option value="csv">CSV</option>
+            </select>
         </div>
-        <div className="mb-4">
-          <label htmlFor="nativeName" className="block text-sm font-medium text-gray-700">Native Name:</label>
-          <input
-            type="text"
-            id="nativeName"
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={nativeName}
-            onChange={(e) => setNativeName(e.target.value)}
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price:</label>
-          <input
-            type="number"
-            id="price"
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image:</label>
-          <input
-            type="file"
-            id="image"
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            onChange={(e) => setImage(e.target.files?.[0] || null)}
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description:</label>
-          <textarea
-            id="description"
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-        <div className="flex justify-center mt-4">
-          <button
-            type="submit"
-            className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
-          >
-            Add Item
-          </button>
-        </div>
-      </form>
-  
-    <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">Current Store Items</h2>
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Search items by name"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        {filteredItems.length > 0 ? (
-          <table className="min-w-full bg-white border border-gray-300 rounded-md shadow-sm">
-            <thead>
-              <tr className="bg-gray-100 border-b">
-                <th className="py-2 px-4">Image</th>
-                <th className="py-2 px-4">Name</th>
-                <th className="py-2 px-4">Native Name</th>
-                <th className="py-2 px-4">Price</th>
-                <th className="py-2 px-4">Description</th>
-                <th className="py-2 px-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredItems.map((item) => (
-                <tr key={item.iid} className="border-b hover:bg-gray-50">
-                  <td className="py-2 px-4">
-                    <img src={item.imageUrl} alt={item.name} className="h-16 w-16 object-cover" />
-                  </td>
-                  <td className="py-2 px-4">{item.name}</td>
-                  <td className="py-2 px-4">{item.nativeName}</td>
-                  <td className="py-2 px-4">£{item.price.toFixed(2)}</td>
-                  <td className="py-2 px-4">{item.description}</td>
-                  <td className="py-2 px-4">
-                    <button
-                      className="py-2 px-4 rounded-full bg-red-500 text-white hover:bg-red-200 hover:text-black font-bold mx-2"
-                      onClick={() => handleDeleteItem(item.iid)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p className="text-gray-500">No items found for the selected store.</p>
+    
+        {selectedFileType === 'csv' && (
+            <div>
+            <form onSubmit={handleUploadCsv}>
+                <div className="mb-4">
+                <label htmlFor="itemsCsv" className="block text-sm font-medium text-gray-700">Upload Items (.csv):</label>
+                <input
+                    type="file"
+                    id="itemsCsv"
+                    accept=".csv"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                    onChange={(e) => setItemsCsv(e.target.files?.[0] || null)}
+                    required
+                />
+                </div>
+                <div className="flex justify-center space-x-4 mt-4">
+                <button
+                    type="button"
+                    className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
+                    onClick={handleDownloadCsv}
+                >
+                    Download Items
+                </button>
+                <button
+                    type="submit"
+                    className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
+                >
+                    Upload Updated Items
+                </button>
+                </div>
+            </form>
+            </div>
         )}
-      </div>
+    
+        {selectedFileType === 'xlsx' && (
+            <div>
+            <form onSubmit={handleUploadExcel}>
+                <div className="mb-4">
+                <label htmlFor="itemsExcel" className="block text-sm font-medium text-gray-700">Upload Items (.xlsx):</label>
+                <input
+                    type="file"
+                    id="itemsExcel"
+                    accept=".xlsx"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                    onChange={(e) => setItemsExcel(e.target.files?.[0] || null)}
+                    required
+                />
+                </div>
+                <div className="flex justify-center space-x-4 mt-4">
+                <button
+                    type="button"
+                    className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
+                    onClick={handleDownloadExcel}
+                >
+                    Download Items
+                </button>
+                <button
+                    type="submit"
+                    className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
+                >
+                    Upload Updated Items
+                </button>
+                </div>
+            </form>
+            </div>
+        )}
+
+        <h1 className="text-2xl font-bold mb-6 mt-3">Add New Item</h1>
+        <form onSubmit={handleSubmit} className="mb-8">
+            <div className="mb-4">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name:</label>
+            <input
+                type="text"
+                id="name"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+            />
+            </div>
+            <div className="mb-4">
+            <label htmlFor="nativeName" className="block text-sm font-medium text-gray-700">Native Name:</label>
+            <input
+                type="text"
+                id="nativeName"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                value={nativeName}
+                onChange={(e) => setNativeName(e.target.value)}
+            />
+            </div>
+            <div className="mb-4">
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price:</label>
+            <input
+                type="number"
+                id="price"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+            />
+            </div>
+            <div className="mb-4">
+            <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image:</label>
+            <input
+                type="file"
+                id="image"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                onChange={(e) => setImage(e.target.files?.[0] || null)}
+            />
+            </div>
+            <div className="mb-4">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description:</label>
+            <textarea
+                id="description"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+            />
+            </div>
+            <div className="flex justify-center mt-4">
+            <button
+                type="submit"
+                className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
+            >
+                Add Item
+            </button>
+            </div>
+        </form>
+  
+        <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4">Current Store Items</h2>
+            <div className="mb-4">
+            <input
+                type="text"
+                placeholder="Search items by name"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            </div>
+            {filteredItems.length > 0 ? (
+            <div className="overflow-x-auto">
+                <table className="min-w-full bg-white border border-gray-300 rounded-md shadow-sm">
+                    <thead>
+                        <tr className="bg-gray-100 border-b">
+                            <th className="py-2 px-4">Image</th>
+                            <th className="py-2 px-4">Name</th>
+                            <th className="py-2 px-4">Native Name</th>
+                            <th className="py-2 px-4">Price</th>
+                            <th className="py-2 px-4">Description</th>
+                            <th className="py-2 px-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredItems.map((item) => (
+                            <tr key={item.iid} className="border-b hover:bg-gray-50">
+                                <td className="py-2 px-4">
+                                    <img src={item.imageUrl} alt={item.name} className="h-16 w-16 object-cover" />
+                                </td>
+                                <td className="py-2 px-4">{item.name}</td>
+                                <td className="py-2 px-4">{item.nativeName}</td>
+                                <td className="py-2 px-4">£{item.price.toFixed(2)}</td>
+                                <td className="py-2 px-4">{item.description}</td>
+                                <td className="py-2 px-4">
+                                    <button
+                                        className="py-2 px-4 rounded-full bg-red-500 text-white hover:bg-red-200 hover:text-black font-bold mx-2"
+                                        onClick={() => handleDeleteItem(item.iid)}
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        
+            ) : (
+            <p className="text-gray-500">No items found for the selected store.</p>
+            )}
+        </div>
     </div>
     );
 }
