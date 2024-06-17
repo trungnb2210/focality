@@ -6,7 +6,6 @@ import "@/app/globals.css";
 import NavBar from '@/components/NavBar';
 import { SearchBar } from '@/components/SearchBar';
 import { FaShoppingCart } from "react-icons/fa";
-import { IoClose } from 'react-icons/io5';
 import { FaTrash } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 

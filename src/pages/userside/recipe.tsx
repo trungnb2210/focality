@@ -9,7 +9,6 @@ import { IoClose } from 'react-icons/io5';
 import { GiCookingPot } from "react-icons/gi";
 import { LuBeef } from "react-icons/lu";
 import { GiBroccoli } from "react-icons/gi";
-import { Step } from 'react-joyride';
 
 
 export interface Recipe {
