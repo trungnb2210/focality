@@ -1,8 +1,8 @@
 {
-    "name": "My App",
+    "name": "Focality",
     "version": "1.0.0",
-    "description": "Description of my app",
-    "author": "Your Name",
+    "description": "Bring the taste of home to wherever you are",
+    "author": "Jack Nguyen, Matthew Ferriman, Linh Hoang, Memi Sawatyanon",
     "icons": [
         {
             "src": "logo192.png",
