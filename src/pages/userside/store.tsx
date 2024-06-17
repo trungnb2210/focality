@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     // Fetch the initial list of stores
     const ingredientsParam = encodeURIComponent(JSON.stringify(ingredientsArray));
     const locationParam = encodeURIComponent(searchAddress || "");
-    const response = await fetch(`https://focality-29xwnzdc4-jack-nguyens-projects-ea05a78b.vercel.app/api/distance?ingredients=${ingredientsParam}&currentLocation=${locationParam}`);
+    const response = await fetch(`https://focality-jack-nguyens-projects-ea05a78b.vercel.app/api/distance?ingredients=${ingredientsParam}&currentLocation=${locationParam}`);
     const data = await response.json();
 
     return {
