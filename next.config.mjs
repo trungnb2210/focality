@@ -10,8 +10,8 @@ const nextConfig = {
 
 const pwaConfig = {
   dest: "public",
-  cacheOnFrontEndNav: true,
-  reloadOnOnline: true,
+  register: true,
+  skipWaiting: true,
 };
 
 export default withPWA(pwaConfig)(nextConfig);

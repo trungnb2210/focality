@@ -1,0 +1,27 @@
+{
+    "name": "My App",
+    "version": "1.0.0",
+    "description": "Description of my app",
+    "author": "Your Name",
+    "icons": [
+        {
+            "src": "logo192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "logo512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "permissions": [
+        "storage",
+        "geolocation"
+    ],
+    "manifest_version": 2
+}
