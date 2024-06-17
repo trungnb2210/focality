@@ -45,21 +45,47 @@ interface ListOfStorePageProps {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { ingredients, address } = context.query;
     const ingredientsArray = ingredients ? (Array.isArray(ingredients) ? ingredients : [ingredients]) : [];
-    const searchAddress = Array.isArray(address) ? address[0] : address; 
+    const searchAddress = Array.isArray(address) ? address[0] : address;
 
-    // Fetch the initial list of stores
-    const ingredientsParam = encodeURIComponent(JSON.stringify(ingredientsArray));
-    const locationParam = encodeURIComponent(searchAddress || "");
-    const response = await fetch(`https://focality-jack-nguyens-projects-ea05a78b.vercel.app/api/distance?ingredients=${ingredientsParam}&currentLocation=${locationParam}`);
-    const data = await response.json();
+    // Return early if address is blank
+    if (!searchAddress) {
+        return {
+            props: {
+                initialStores: [],
+                ingredients: ingredientsArray,
+                searchAddress: null,
+            },
+        };
+    }
 
-    return {
-        props: {
-            initialStores: data.stores || [],
-            ingredients: ingredientsArray,
-            searchAddress: searchAddress
-        },
-    };
+    try {
+        const ingredientsParam = encodeURIComponent(JSON.stringify(ingredientsArray));
+        const locationParam = encodeURIComponent(searchAddress);
+        const response = await fetch(`https://focality-jack-nguyens-projects-ea05a78b.vercel.app/api/distance?ingredients=${ingredientsParam}&currentLocation=${locationParam}`);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        return {
+            props: {
+                initialStores: data.stores || [],
+                ingredients: ingredientsArray,
+                searchAddress: searchAddress,
+            },
+        };
+    } catch (error) {
+        console.error(error);
+        return {
+            props: {
+                initialStores: [],
+                ingredients: ingredientsArray,
+                searchAddress: searchAddress,
+            },
+        };
+    }
 }
 
 const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingredients, searchAddress }) => {

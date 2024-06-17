@@ -18,16 +18,15 @@ const SearchIngredientPage: React.FC = () => {
 
   useEffect(() => {
     const { query } = router;
+    if (query.address) {
+      const addr = query.address as string;
+      setAddress(addr);
+    }
     if (query.ingredients) {
       const ingredients = Array.isArray(query.ingredients) ? query.ingredients : [query.ingredients];
       setSelectedIngredients(ingredients);
       const newFreq = initialFrequent.filter(i => !ingredients.includes(i));
       setFrequent(newFreq);
-      if (query.address) {
-        const addr = query.address as string;
-        setAddress(addr);
-        console.log(address)
-      }
     } else {
       setFrequent(initialFrequent);
     }
@@ -138,7 +137,7 @@ const SearchIngredientPage: React.FC = () => {
                 pathname: "/userside/store",
                 query: {
                     ingredients: preprocessIngredients(selectedIngredients),
-                    address: address ? address : ""
+                    address: address
                 } })}
             className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold mx-2">Find Store</button>
       </footer>
