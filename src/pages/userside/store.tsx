@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useLoadScript, Autocomplete } from '@react-google-maps/api';
+import { useLoadScript } from '@react-google-maps/api';
 import { Loader } from '@googlemaps/js-api-loader';
 import { GetServerSideProps } from 'next';
 import "@/app/globals.css";
@@ -47,11 +47,17 @@ interface ListOfStorePageProps {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { ingredients, address } = context.query;
     const ingredientsArray = ingredients ? (Array.isArray(ingredients) ? ingredients : [ingredients]) : [];
-    const searchAddress = address ? address : null;
+    const searchAddress = Array.isArray(address) ? address[0] : address; 
+
+    // Fetch the initial list of stores
+    const ingredientsParam = encodeURIComponent(JSON.stringify(ingredientsArray));
+    const locationParam = encodeURIComponent(searchAddress || "");
+    const response = await fetch(`https://focality-q58uq8q6l-jack-nguyens-projects-ea05a78b.vercel.app/api/distance?ingredients=${ingredientsParam}&currentLocation=${locationParam}`);
+    const data = await response.json();
 
     return {
         props: {
-            initialStores: [],
+            initialStores: data.stores || [],
             ingredients: ingredientsArray,
             searchAddress: searchAddress
         },
@@ -66,27 +72,24 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
 
     const router = useRouter();
 
-    const [initStore, setInitStore] = useState<Store[]>(initialStores);
     const [stores, setStores] = useState<Store[]>(initialStores);
     const [currentLocation, setCurrentLocation] = useState<string>(searchAddress || "");
     const [showFilterModal, setShowFilterModal] = useState<boolean>(false);
     const [filterMustHaveIngredients, setFilterMustHaveIngredients] = useState<string[]>([]);
-    
+    const [sortCriteria, setSortCriteria] = useState('matchedIngredients');
+
     const fetchStores = async (location: string) => {
         const ingredientsParam = encodeURIComponent(JSON.stringify(ingredients));
         const locationParam = encodeURIComponent(location);
         const response = await fetch(`../api/distance?ingredients=${ingredientsParam}&currentLocation=${locationParam}`);
         const data = await response.json();
         setStores(data.stores);
-        setInitStore(data.stores)
         setCurrentLocation(location);
     };
 
     const handleLocationSelect = (location: string) => {
         fetchStores(location);
     };
-
-    const [sortCriteria, setSortCriteria] = useState('matchedIngredients');
 
     const sortedStores = stores.sort((a, b) => {
         if (sortCriteria === 'distance') {
@@ -96,36 +99,34 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
     });
 
     const handleIngredientToggle = (ingredient: string) => {
-        setFilterMustHaveIngredients(prev => 
-          prev.includes(ingredient) ? prev.filter(i => i !== ingredient) : [...prev, ingredient]
+        setFilterMustHaveIngredients(prev =>
+            prev.includes(ingredient) ? prev.filter(i => i !== ingredient) : [...prev, ingredient]
         );
-      };
-      
+    };
 
-      const handleFilterApply = () => {
-        console.log(initStore)
-        const filteredStores = initStore.filter(store => 
-          filterMustHaveIngredients.every(ingredient => 
-            store.items.some(item => 
-              item.name.toLowerCase().includes(ingredient.toLowerCase()) || 
-              (item.nativeName && item.nativeName.toLowerCase().includes(ingredient.toLowerCase()))
+    const handleFilterApply = () => {
+        const filteredStores = stores.filter(store =>
+            filterMustHaveIngredients.every(ingredient =>
+                store.items.some(item =>
+                    item.name.toLowerCase().includes(ingredient.toLowerCase()) ||
+                    (item.nativeName && item.nativeName.toLowerCase().includes(ingredient.toLowerCase()))
+                )
             )
-          )
         );
         setStores(filteredStores);
         setShowFilterModal(false);
-      };
-      
-      
-      
+    };
 
+    // Poll for updates every 30 seconds
     useEffect(() => {
-        if (searchAddress) {
-            fetchStores(searchAddress);
-        }
-    }, [searchAddress]);
+        const interval = setInterval(() => {
+            fetchStores(currentLocation);
+        }, 1000);
 
-    if (!isLoaded) return <CircularProgress/>;
+        return () => clearInterval(interval);
+    }, [currentLocation]);
+
+    if (!isLoaded) return <CircularProgress />;
 
     return (
         <div className="flex flex-col h-screen">
@@ -166,60 +167,59 @@ const ListOfStorePage: React.FC<ListOfStorePageProps> = ({ initialStores, ingred
             <footer className="w-full flex justify-center items-center py-2 fixed bottom-0
            left-0 right-0 bg-white drop-shadow-4xl backdrop-filter backdrop-blur-lg bg-opacity-40">
                 <button
-                    onClick={() => 
-                        router.push({ 
-                            pathname: "/userside/search", 
-                            query: { 
-                                ingredients: ingredients, 
-                                address: currentLocation 
-                            } 
+                    onClick={() =>
+                        router.push({
+                            pathname: "/userside/search",
+                            query: {
+                                ingredients: ingredients,
+                                address: currentLocation
+                            }
                         })}
                     className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold mx-2"
-                    >
-                        <span>View cart</span>
-                        {ingredients.length > 0 && (
-                            <span className="">
+                >
+                    <span>View cart</span>
+                    {ingredients.length > 0 && (
+                        <span className="">
                             <span> (</span> {ingredients.length} <span>)</span>
-                            </span>
-                        )}
-                    </button>
-           </footer>
-           {showFilterModal && (
+                        </span>
+                    )}
+                </button>
+            </footer>
+            {showFilterModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg max-w-md w-full p-4">
-                    <h2 className="text-xl font-bold mb-4">Filter Options</h2>
-                    <h3 className="font-semibold mb-2">Must-Have Ingredients</h3>
-                    <ul className="list-inside mb-4">
-                        {ingredients.map(ingredient => (
-                        <li key={ingredient} className="flex items-center">
-                            <input
-                            type="checkbox"
-                            checked={filterMustHaveIngredients.includes(ingredient)}
-                            onChange={() => handleIngredientToggle(ingredient)}
-                            className="mr-2"
-                            />
-                            <span className="text-sm">{ingredient}</span>
-                        </li>
-                        ))}
-                    </ul>
-                    <div className="flex justify-end">
-                        <button
-                        onClick={() => setShowFilterModal(false)}
-                        className="py-2 px-4 rounded-full bg-gray-300 text-black font-bold mx-2"
-                        >
-                        Cancel
-                        </button>
-                        <button
-                        onClick={handleFilterApply}
-                        className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold mx-2"
-                        >
-                        Apply
-                        </button>
-                    </div>
+                        <h2 className="text-xl font-bold mb-4">Filter Options</h2>
+                        <h3 className="font-semibold mb-2">Must-Have Ingredients</h3>
+                        <ul className="list-inside mb-4">
+                            {ingredients.map(ingredient => (
+                                <li key={ingredient} className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={filterMustHaveIngredients.includes(ingredient)}
+                                        onChange={() => handleIngredientToggle(ingredient)}
+                                        className="mr-2"
+                                    />
+                                    <span className="text-sm">{ingredient}</span>
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="flex justify-end">
+                            <button
+                                onClick={() => setShowFilterModal(false)}
+                                className="py-2 px-4 rounded-full bg-gray-300 text-black font-bold mx-2"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleFilterApply}
+                                className="py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold mx-2"
+                            >
+                                Apply
+                            </button>
+                        </div>
                     </div>
                 </div>
-                )}
-
+            )}
         </div>
     );
 };
