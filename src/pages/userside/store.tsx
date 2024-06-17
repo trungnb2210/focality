@@ -6,8 +6,6 @@ import "@/app/globals.css";
 import NavBar from '@/components/NavBar';
 import ItemComponent from '@/components/storeItem';
 import LocationInput from '@/components/LocationInput';
-import Link from 'next/link';
-import { FaShoppingCart } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import CircularProgress from '@mui/material/CircularProgress';
 

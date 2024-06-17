@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import "@/app/globals.css"
 import NavBar from '@/components/NavBar';
 import { FaArrowLeft, FaArrowRight, FaHeart, FaRegHeart, FaShoppingCart } from 'react-icons/fa';
@@ -9,6 +9,7 @@ import { IoClose } from 'react-icons/io5';
 import { GiCookingPot } from "react-icons/gi";
 import { LuBeef } from "react-icons/lu";
 import { GiBroccoli } from "react-icons/gi";
+
 
 export interface Recipe {
   rid: string;
@@ -41,22 +42,23 @@ interface RecipeListProps {
 }
 
 const RecipeList: React.FC<RecipeListProps> = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [favouriteRecipes, setFavouriteRecipes] = useState<Recipe[]>([]);
-  const [dailySuggestion, setDailySuggestion] = useState<Recipe | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
-  const [favScrollLeftDisabled, setFavScrollLeftDisabled] = useState<boolean>(true);
-  const [favScrollRightDisabled, setFavScrollRightDisabled] = useState<boolean>(false);
-  const [recScrollLeftDisabled, setRecScrollLeftDisabled] = useState<boolean>(true);
-  const [recScrollRightDisabled, setRecScrollRightDisabled] = useState<boolean>(false);
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
-  const [basket, setBasket] = useState<Set<string>>(new Set());
-  const [user, setUser] = useState<User>();
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [favouriteRecipes, setFavouriteRecipes] = useState<Recipe[]>([]);
+    const [dailySuggestion, setDailySuggestion] = useState<Recipe | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>('');
+    const [favScrollLeftDisabled, setFavScrollLeftDisabled] = useState<boolean>(true);
+    const [favScrollRightDisabled, setFavScrollRightDisabled] = useState<boolean>(false);
+    const [recScrollLeftDisabled, setRecScrollLeftDisabled] = useState<boolean>(true);
+    const [recScrollRightDisabled, setRecScrollRightDisabled] = useState<boolean>(false);
+    const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+    const [basket, setBasket] = useState<Set<string>>(new Set());
+    const [user, setUser] = useState<User>();
 
-  const favRef = useRef<HTMLDivElement>(null);
-  const recRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
+    const favRef = useRef<HTMLDivElement>(null);
+    const recRef = useRef<HTMLDivElement>(null);
+    const router = useRouter();
+
 
   useEffect(() => {
     const fetchUserAndRecipes = async () => {
@@ -98,13 +100,6 @@ const RecipeList: React.FC<RecipeListProps> = () => {
     fetchUserAndRecipes();
   }, [router.query]);
 
-  const findIngredientList = (convertingRec: Recipe[] | null) => {
-    if (convertingRec != null) {
-      return convertingRec.map(r => r.items).flat();
-    } else {
-      return [];
-    }
-  }
 
   const scroll = (ref: React.RefObject<HTMLDivElement>, direction: 'left' | 'right') => {
     if (ref.current) {
@@ -120,7 +115,6 @@ const RecipeList: React.FC<RecipeListProps> = () => {
 
       ref.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
 
-      // Disable buttons based on the new scroll position
       if (ref === favRef) {
         setFavScrollLeftDisabled(scrollTo === 0);
         setFavScrollRightDisabled(scrollTo === maxScrollLeft);
@@ -161,17 +155,20 @@ const RecipeList: React.FC<RecipeListProps> = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="items-center flex flex-col justify-between min-h-screen">
+    <div className="items-center flex flex-col justify-between min-h-screen recipe-page">
       <NavBar brandName={'Recipes'} />
+      <div className="flex items-center justify-center p-4 relative w-full">
+            <h1 className="text-2xl text-gray-800 mb-4">Chào mừng trở lại <span className="font-semibold">Kevin Nguyen!</span> 😊</h1>
+      </div>
       {dailySuggestion && (
-        <div className="text-center p-4">
+        <div className="text-center p-4 daily-suggestion">
           <h1 className="font-semibold text-lg">Daily Suggested Recipe</h1>
           <div className="relative rounded-lg shadow-lg overflow-hidden w-full my-4 max-w-md mx-auto cursor-pointer hover:bg-gray-200 transition duration-300">
-            <button className="absolute top-2 left-2 bg-white text-red-500 rounded-full p-2 z-10" onClick={() => toggleFavourite(dailySuggestion)}>
+            <button className="absolute top-2 left-2 bg-white text-red-500 rounded-full p-2 z-10 fav-button" onClick={() => toggleFavourite(dailySuggestion)}>
                     {favouriteRecipes.some(favRecipe => favRecipe.rid === dailySuggestion.rid) ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
-                </button>
+            </button>
             <div
-                className=""
+                className="recipe-card"
                 onClick={() => setSelectedRecipe(dailySuggestion)}
                 ref={recRef}
             >
@@ -189,7 +186,7 @@ const RecipeList: React.FC<RecipeListProps> = () => {
           </div>
         </div>
       )}
-      <div className="w-full sm:max-w-5xl max-w-lg mx-auto px-4">
+      <div className="w-full sm:max-w-5xl max-w-lg mx-auto px-4 favourite-recipes">
         <h1 className="font-semibold text-lg mb-2">Favourite Recipes</h1>
         <div className="relative">
           <div ref={favRef} className="flex overflow-x-auto space-x-4 p-4 h-60 scrollbar-hide">
@@ -254,12 +251,13 @@ const RecipeList: React.FC<RecipeListProps> = () => {
       <footer className="flex justify-center items-center fixed bottom-0 left-0 right-0
       bg-white drop-shadow-4xl backdrop-filter backdrop-blur-lg bg-opacity-40 py-2 z-20">
         <Link
-          className="relative py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8] hover:text-black font-bold"
+          className="relative py-2 px-4 rounded-full bg-[#4F6367] text-white hover:bg-[#B8D8D8]
+          hover:text-black font-bold view-cart ml-2"
           href={{
             pathname: "/userside/search",
             query: {
               ingredients: Array.from(basket),
-              address: user?.homeSortcode
+              address: user?.homeSortcode,
             }
           }}
         >
@@ -329,7 +327,7 @@ const RecipeModal: React.FC<{ recipe: Recipe; onClose: () => void; onAddToBasket
             {isFavourite ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
           </button>
         </div>
-        <div className="p-4">
+        <div className="p-4 item-checklist">
           <h2 className="text-xl font-bold mb-2">{recipe.name}</h2>
           <p className="text-sm mb-4">{recipe.description}</p>
           <h3 className="font-semibold mb-2">Ingredients</h3>
