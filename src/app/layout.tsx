@@ -6,7 +6,7 @@ import { StrictMode } from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Create Next App",
+  title: "Focality",
   manifest: "/manifest.json",
 };
 
