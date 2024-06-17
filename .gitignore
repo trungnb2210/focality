@@ -39,3 +39,8 @@ next-env.d.ts
 
 # database connection
 .env
+
+#pwa
+sw.*
+workbox-*
+swe-worker-*

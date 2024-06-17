@@ -1,9 +1,18 @@
 /** @type {import('next').NextConfig} */
 
+import withPWA from 'next-pwa';
+
 const nextConfig = {
   experimental: {
     forceSwcTransforms: true,
-  }
+  },
 };
 
-export default nextConfig;
+const pwaConfig = {
+  dest: "public",
+  cacheOnFrontEndNav: true,
+  runtimeCaching: true,
+  reloadOnOnline: true,
+};
+
+export default withPWA(pwaConfig)(nextConfig);
