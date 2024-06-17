@@ -5,12 +5,12 @@
     "author": "Jack Nguyen, Matthew Ferriman, Linh Hoang, Memi Sawatyanon",
     "icons": [
         {
-            "src": "logo192.png",
+            "src": "focalityLogo192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "logo512.png",
+            "src": "focalityLogo512.png",
             "sizes": "512x512",
             "type": "image/png"
         }
