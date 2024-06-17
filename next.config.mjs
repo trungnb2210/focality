@@ -11,7 +11,6 @@ const nextConfig = {
 const pwaConfig = {
   dest: "public",
   cacheOnFrontEndNav: true,
-  runtimeCaching: true,
   reloadOnOnline: true,
 };
 
