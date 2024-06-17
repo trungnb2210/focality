@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { parse } from 'papaparse';
 import ExcelJS from 'exceljs';
 import "@/app/globals.css";
+import NavBar from '@/components/NavBar';
 
 export interface Item2 {
   name: string;
@@ -346,6 +347,7 @@ export default function StoreSide() {
 
   return (
     <div className="mx-auto bg-white p-6 rounded-md shadow-md mt-10">
+        <NavBar brandName={'Store'}></NavBar>
         <a
             href="https://drive.google.com/file/d/1Ri8xnCxDgE-NiCf3CoBpEw4HF5oulKBM/view?usp=sharing"
             target="_blank"
