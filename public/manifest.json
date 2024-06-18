@@ -6,7 +6,7 @@
     "icons": [
         {
             "src": "focality.png",
-            "sizes": "1200x1200",
+            "sizes": "512x512",
             "type": "image/png"
         }
     ],
